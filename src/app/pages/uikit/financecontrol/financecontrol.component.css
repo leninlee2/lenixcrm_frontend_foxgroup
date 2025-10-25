@@ -1,0 +1,47 @@
+.w100{
+    width: 100% !important;
+  }
+
+.mb10{
+    margin-bottom: 10px !important;
+}
+
+.mb5{
+  margin-bottom: 5px !important;
+}
+
+.poppipeline{
+  min-width: 500px !important;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.w50{
+  width: 50% !important;
+}
+
+.w49{
+  width: 49% !important;
+}
+
+.w98{
+  width: 98% !important;
+}
+
+.whalfsize{
+  max-width: 200px !important;
+}
+
+.atop{
+  vertical-align: top !important;
+}
+
+.right{
+  float:right;
+}
+
+.ml5{
+  margin-left: 5px !important;
+}

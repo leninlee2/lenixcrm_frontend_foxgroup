@@ -1,0 +1,177 @@
+<div class="flex flex-col md:flex-row">
+  <!--
+    <div class="card-buttoms">
+        <div class="card card-topb">
+                <table>
+                  <tr>
+                    <td>
+                      <p-button (click)="getChangeUnread()" label="Unread" severity="danger" />&nbsp;
+                      <p-button (click)="getRecent()" label="Recents" severity="success" />&nbsp;
+                      <p-button (click)="getChangeSource(-1,'All')" label="All" severity="warn" />&nbsp;
+                      <b>Current Select:&nbsp;{{currentSelect}}</b>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <br/>
+                      
+                      <p-button (click)="getChangeSource(1,'Facebook')" label="Facebook" severity="info" />&nbsp;
+                      
+                      <p-button (click)="getChangeSource(5,'Face MKT')" label="Face MKT" severity="info" />&nbsp;
+                      <p-button (click)="getChangeSource(5,'Face MKT')" label="Archived" severity="secondary" />
+                      
+                      <p-button (click)="getChangeSource(2,'Instagram')" label="Instagram" severity="info" />&nbsp;
+                      <p-button (click)="getChangeSource(0,'WhatsApp')" label="WhatsApp" severity="info" />&nbsp;
+                      <p-button (click)="getChangeSource(4,'Email')" label="Email" severity="info" />&nbsp;
+                      <p-button (click)="getChangeSource(3,'SMS')" label="SMS" severity="info" />&nbsp;
+                      
+                    </td>
+                  </tr>
+                </table>
+        </div>
+        <div class="card card-from">
+  
+            <div id="myScrollFrom" class=" hight-messages b-green" #myScrollFrom>
+                <p-card  class="bot-card pointer" *ngFor="let source of fromSources" (click)="openChat(source)" [ngStyle]="{ 'margin-bottom': '24px' }" >
+                  <h6 class="topcard">
+                    <p-avatar [label]="getSymbol(source.from)" styleClass="mr-2"  shape="circle"  />{{getSender(source)}}
+                    &nbsp;
+                    <p-button class="right ml5" (click)="openDeleteChatPopup($event,source)" label="Archive" severity="secondary" />
+                    &nbsp;
+                    <p-button class="right" (click)="addOpportunityPopup($event,source)" label="OP" severity="success" />
+                    
+                </h6>
+                
+                <p class="m-0 topcard mt-overcircle" >
+                    <i class="pi pi-whatsapp" style="color: green" *ngIf="source.source == 0" ></i>
+                    <i class="pi pi-facebook" style="color: green" *ngIf="source.source == 1" ></i>
+                    <i class="pi pi-instagram" style="color: green" *ngIf="source.source == 2" ></i>
+                    <i class="pi pi-phone" style="color: green" *ngIf="source.source == 3" ></i>
+                    <i class="pi pi-envelope" style="color: green" *ngIf="source.source == 4" ></i>
+                    <i class="pi pi-facebook" style="color: green" *ngIf="source.source == 5" >-<a [href]="source.url" target="_blank">Marketplace</a></i>
+                  &nbsp;                
+                </p>
+                <br/>
+                  <div class="count-messages">
+                    <span><b>Last Message:&nbsp;{{source.createdDate | date:'MM/dd/yyyy HH:mm' }}</b></span>
+                    <span *ngIf="source.numMessages > 0"><p-avatar [label]="getPageNumber(source)" styleClass="mr-2 b-lgreen right "  shape="circle"  /></span>
+                  </div>
+                  
+                    
+                </p-card>
+            </div>
+            <div class="center-text">
+              <div>
+                <p-button (click)="appendPage()" label="More" severity="success" class="right" />
+              </div> 
+            </div>
+     
+            <div>
+              <p-paginator (onPageChange)="getPageSource($event)" [first]="firstIndex" [rows]="rows" [totalRecords]="getSourceNumber()" [rowsPerPageOptions]="[5]" />
+            </div>
+        
+        </div>
+    </div>
+    <div class="w100all">
+        <div>
+          <h3>Current Customer:</h3><h5>{{getCurrentCustomer()}}</h5>
+        </div>
+        <div class="card chat-limit" #scrollMe>
+            <div class="chat-container">
+                <div class="chat-message {{getDirection(message)}}" *ngFor="let message of chatMessages"  >
+                    <p-card *ngIf="getDirectionColor(message) == 'lightblue' " class="message-card " data-custom="lightblue"  >
+                      <ng-template pTemplate="header">
+                        <small>&nbsp;&nbsp;<b>{{message.from}}</b>
+                        </small>
+                      </ng-template>
+                      <ng-template pTemplate="content" >
+                        <div [innerHTML]="message.message"></div>
+                      </ng-template>
+                    </p-card>
+                    <p-card *ngIf="getDirectionColor(message) != 'lightblue' " class="message-card " data-custom="lightgray"  >
+                      <ng-template pTemplate="header">
+                        <small>&nbsp;&nbsp;<b>{{message.from}}</b>
+                        </small>
+                      </ng-template>
+                      <ng-template pTemplate="content" >
+                        <div [innerHTML]="message.message"></div>
+                      </ng-template>
+                    </p-card>
+                </div>                
+            </div>
+        </div>
+        <div class="card">
+            <div class="font-semibold text-xl mb-4">Message</div>
+            <div class="flex flex-col gap-4 mb-4">
+                <div id="editor" style="height: 100px;"></div>
+            </div>
+            <p-button (click)="addMessage()" label="Send" severity="success" class="right" />
+        </div>
+    </div>
+</div>
+-->
+
+<p-dialog header="Add Pipelines" [modal]="true" [(visible)]="openPipeline" class="poppipeline" >
+    <span class="p-text-secondary block mb-8 p-opportunity">Pipeline/Opportunity Information.</span>
+          <div class="flex items-center gap-2 mb-4">
+            <label for="appointment" class="font-semibold w-24">Appointment</label>
+            <p-datepicker id="appointment" class="flex-auto" [(ngModel)]="appointment" [showTime]="true" />
+          </div>
+          <div class="flex items-center gap-2 mb-4">
+              <label for="customer" class="font-semibold w-24">Customer</label>
+              <input pInputText id="customer" class="flex-auto" autocomplete="off" [(ngModel)]="customerName" />
+          </div>
+          <div class="flex items-center gap-2 mb-4">
+            <label for="owner" class="font-semibold w-24">Owner</label>
+            <input pInputText id="owner" class="flex-auto" autocomplete="off" [(ngModel)]="owner" />
+          </div>
+          <div class="flex items-center gap-2 mb-4 mt20 left w30p">
+            <label for="pipeline" class="font-semibold w-24 ">Pipeline</label>
+            <p-select [options]="statuses" placeholder="Select a Pipeline" 
+                        optionLabel="name" class="w-full md:w-56" (onChange)="getCategory()" [(ngModel)]="selectedCategory" />
+          </div>
+          <div class="flex items-center gap-2 mb-4 mt20 left w30p">
+            <label for="tab" class="font-semibold w-24">&nbsp;Tab</label>
+            <p-select [options]="availablePipelines" placeholder="Select a Tab" 
+                      optionLabel="namePipeline" class="w-full md:w-56" [(ngModel)]="selectedPipelinePop" />
+          </div>
+          <div class="flex items-center gap-2 mb-4 mt20 w30p left" >
+            <label for="value" class="font-semibold w-24">Value</label>
+            <input pInputText id="value" class="flex-auto" autocomplete="off" [(ngModel)]="value" />
+          </div>
+          <div class="flex items-center gap-2 mb-2 w50p left" >
+            <label for="email" class="font-semibold w-24">Email</label>
+            <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="email" />
+          </div>
+          <div class="flex items-center gap-2 mb-2 w50p left">
+            <label for="phone" class="font-semibold w-24">&nbsp;Phone</label>
+            <input pInputText id="phone" class="flex-auto" autocomplete="off" [(ngModel)]="phone" />
+          </div>
+          <br/>
+          <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+            <label for="address" class="font-semibold w-24">Address</label>
+            <input pInputText id="address" class="flex-auto" autocomplete="off" [(ngModel)]="address" />
+          </div>
+          <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+            <label for="details" class="font-semibold w-24">Details</label>
+            <input pInputText id="details" class="flex-auto" autocomplete="off" [(ngModel)]="details" />
+          </div>
+          <div class="flex justify-end gap-2 left w100p">
+              <p-button label="Cancel" severity="secondary" (click)="closeOpportunity()" />
+              <p-button label="Save" (click)="saveNewPipeline()" />
+          </div>
+    
+  </p-dialog>
+
+  <p-dialog header="Archive Chat" [modal]="true" [(visible)]="warnDeleteChat" class="poppipeline" >
+  
+    <div class="flex items-center gap-2 mb-4 wWarning">
+      <label for="pipeline" class="font-semibold w100p">Are you sure that you archive the Chat?</label><br/>
+     
+    </div>
+    <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+      <p-button label="No" (onClick)="warnDeleteChat = false" severity="secondary" />
+      <p-button label="Yes" (onClick)="deleteChat()" severity="success" />
+    </div>
+    
+  </p-dialog>

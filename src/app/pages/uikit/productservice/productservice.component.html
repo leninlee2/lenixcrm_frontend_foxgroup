@@ -1,0 +1,68 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;Products/Services</h3>
+    </p-card>
+</div>
+
+<div class="card-container mb10">
+  <table class="w100">
+    <tr>
+      <td  style="width: 50% !important;" >
+        <p-card >
+          <table class="w100" >
+              <tr>
+                <td  >
+                  <label for="name" class="font-semibold w-24 mb5">Product/Service&nbsp;</label><br/>
+                  <input pInputText id="name" class="flex-auto  w98" autocomplete="off" [(ngModel)]="productServiceDTO.name" />&nbsp;
+                </td>
+                <td   >
+                  <label for="salesman" class="font-semibold w-24 mb5">Unity Price&nbsp;</label><br/>
+                  <input pInputText id="unityPrice" class="flex-auto  w98" autocomplete="off" [(ngModel)]="productServiceDTO.unityPrice" />&nbsp;
+                </td>
+                <td   >
+                  <label for="salesman" class="font-semibold w-24 mb5">Cost&nbsp;</label><br/>
+                  <input pInputText id="unityPrice" class="flex-auto  w98" autocomplete="off" [(ngModel)]="productServiceDTO.cost" />&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3"  >
+                  <br/>
+                  &nbsp;
+                  <p-button [label]="getStateGeneralControl()" severity="success" class="right ml5 mb5" (click)="addProductService()"  />
+                  <p-button *ngIf="productServiceDTO.id > 0" label="Reset" severity="success" class="right ml5 mb5" (click)="resetProductService()"  />&nbsp;
+                  <br/><br/>
+                </td>
+              </tr>          
+          </table>
+          <p-table [value]="productServices" [style]="{ 'width': '100%' }" class="mb10" >
+            <ng-template #header>
+                <tr>
+                    <th>Product/Service</th>
+                    <th>Unity Price</th>
+                    <th>Cost</th>
+                    <th>Edit</th>
+                    <th>-</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-row  >
+            <tr  >
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.unityPrice | currency: 'USD' }}</td>
+                    <td>{{ row.cost | currency: 'USD'}}</td>
+                    <td >
+                      <i class="pi pi-pencil" style="color: slateblue" (click)="editProductService(row)"  ></i>   
+                    </td>
+                    <td >
+                      <i class="pi pi-trash" style="color: slateblue" (click)="inactiveProductService(row)"  ></i>   
+                    </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+        </p-card>
+      </td>
+    </tr>
+  </table>
+  
+  
+</div>

@@ -1,0 +1,65 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;Contacts</h3>
+        <p-button label="+ Add Contact" severity="success" class="right ml5" (onClick)="openNewContact()" />
+    </p-card>
+</div>
+
+<p-table [value]="customers" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #header>
+        <tr>
+            <th></th>
+            <th><p-checkbox [(ngModel)]="checkedAll" [binary]="true" /></th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Created</th>
+            <th>Last Activity</th>
+            <th>Tags</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-lead  >
+        <tr (click)="openEdit(lead)" class="pointer" >
+            <td><i class="pi pi-ellipsis-v" style="color: slateblue"></i></td>
+            <td><p-checkbox [(ngModel)]="checkedAll" [binary]="true" /></td>
+            <td>{{ lead.name }}</td>
+            <td>{{ lead.phone }}</td>
+            <td>{{ lead.email }}</td>
+            <td>{{ lead.address }}</td>
+            <td>{{ lead.createdDate }}</td>
+            <td>{{ lead.updated }}</td>
+            <td>{{ lead.tags }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog header="Add/Edit Contact" [modal]="true" [(visible)]="openContact" class="poppipeline" >
+    <div class="poppipeline" >
+        <span class="p-text-secondary block mb-8">Contact Information.</span>
+          <div class="flex items-center gap-2 mb-4">
+            <label for="name" class="font-semibold w-24">Name</label>
+            <input pInputText id="name" class="flex-auto" autocomplete="off" [(ngModel)]="customer.name" />
+          </div>
+          <div class="flex items-center gap-2 mb-4">
+              <label for="email" class="font-semibold w-24">Email</label>
+              <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="customer.email" />
+          </div>
+          <div class="flex items-center gap-2 mb-4">
+            <label for="phone" class="font-semibold w-24">Phone</label>
+            <input pInputText id="phone" class="flex-auto" autocomplete="off" [(ngModel)]="customer.phone" />
+          </div>
+          <div class="flex items-center gap-2 mb-4 mt20 left w30p">
+            <label for="address" class="font-semibold w-24 ">Address</label>
+            <input pInputText id="address" class="flex-auto" autocomplete="off" [(ngModel)]="customer.address" />
+          </div>
+          <div class="flex items-center gap-2 mb-4 mt20 w30p left" >
+            <label for="tags" class="font-semibold w-24">Tags</label>
+            <input pInputText id="tags" class="flex-auto" autocomplete="off" [(ngModel)]="customer.tags" />
+          </div>
+          <div class="flex justify-end gap-2 left w100p">
+              <p-button label="Cancel" severity="secondary" (click)="openContact = false;" />
+              <p-button label="Save" (click)="editOrSave()" />
+          </div>
+        </div>
+  </p-dialog>

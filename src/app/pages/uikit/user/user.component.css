@@ -1,0 +1,23 @@
+.w100{
+    width: 100% !important;
+  }
+
+.mb10{
+    margin-bottom: 10px !important;
+}
+
+.poppipeline{
+  min-width: 500px !important;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+:host ::ng-deep .p-autocomplete {
+  width: 100%;
+}
+
+:host ::ng-deep .p-autocomplete-input {
+  width: 100%;
+}

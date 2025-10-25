@@ -1,0 +1,120 @@
+<full-calendar [options]="calendarOptions"></full-calendar>
+
+<p-dialog header="Event Details" [(visible)]="displayDialog" [modal]="true" [closable]="true">
+  <div class="p-fluid">
+    <div class="p-field">
+      <label for="title">Title</label>
+      <input id="title" type="text" pInputText [(ngModel)]="newEvent.title" />
+    </div>
+
+    <div class="p-field">
+      <label for="date">Date</label>
+      <p-calendar id="date" [(ngModel)]="newEvent.start" dateFormat="yy-mm-dd"></p-calendar>
+    </div>
+
+    <div class="p-field">
+      <label for="description">Description</label>
+      <textarea id="description" pInputTextarea [(ngModel)]="newEvent.description"></textarea>
+    </div>
+  </div>
+
+  <p-footer>
+    <button pButton label="Save" icon="pi pi-check" (click)="saveEvent()"></button>
+    <button pButton label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="displayDialog=false"></button>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="Add/Edit Pipelines" [modal]="true" [(visible)]="openPipeline" class="poppipeline" >
+  <p-tabs [(value)]="index"   >
+    <p-tablist>
+      <p-tab value="0" id="tabop" data-defaulttab="opportunity" >Opportunity</p-tab>
+      <p-tab value="1" *ngIf="idOpportunity > 0" >Notes</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0" #tabop>
+        <span class="p-text-secondary block mb-8">Pipeline/Opportunity Information.</span>
+        <div class="flex items-center gap-2 mb-4">
+          <label for="appointment" class="font-semibold w-24">Appointment</label>
+          <p-datepicker id="appointment" class="flex-auto" [(ngModel)]="savedItem.appointment" [showTime]="true"  />
+          <label *ngIf="savedItem.appointment != null" ><b>Current Apppointment</b>:&nbsp;{{ savedItem.appointment | date: 'medium' : 'America/New_York' }}</label>
+        </div>
+        <div class="flex items-center gap-2 mb-4">
+            <label for="customer" class="font-semibold w-24">Customer</label>
+            <input pInputText id="customer" class="flex-auto" autocomplete="off" [(ngModel)]="savedItem.nameCustomer" />
+        </div>
+        <div class="flex items-center gap-2 mb-4">
+          <label for="owner" class="font-semibold w-24">Owner</label>
+          <input pInputText id="owner" class="flex-auto" autocomplete="off" [(ngModel)]="savedItem.owner" />
+        </div>
+        <div class="flex items-center gap-2 mb-4 mt20 left w30p">
+          <label for="statuses" class="font-semibold w-24 ">Pipeline</label>
+          <p-select [options]="statuses" placeholder="Select a Pipeline" 
+                      optionLabel="name" class="w-full md:w-56" (onChange)="getTabs(false)" [(ngModel)]="selectedCategoryPop" />
+        </div>
+        <div class="flex items-center gap-2 mb-4 mt20 left w30p">
+          <label for="tab" class="font-semibold w-24">&nbsp;Tab</label>
+          <p-select [options]="pipelinePop" placeholder="Select a Tab" 
+                    optionLabel="name" class="w-full md:w-56" [(ngModel)]="selectedPipelinePop" />
+          <label><b>Current Tab:</b>{{selectedPipelinePop!=null?selectedPipelinePop.name:""}}</label>
+        </div>
+        <div class="flex items-center gap-2 mb-4 mt20 w30p left" >
+          <label for="value" class="font-semibold w-24">Value</label>
+          <input pInputText id="value" class="flex-auto" autocomplete="off" [(ngModel)]="savedItem.value" />
+        </div>
+        <div class="flex items-center gap-2 mb-2 w50p left" >
+          <label for="email" class="font-semibold w-24">Email</label>
+          <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="savedItem.email" />
+        </div>
+        <div class="flex items-center gap-2 mb-2 w50p left">
+          <label for="phone" class="font-semibold w-24">&nbsp;Phone</label>
+          <input pInputText id="phone" class="flex-auto" autocomplete="off" [(ngModel)]="savedItem.phone" />
+        </div>
+        <br/>
+        <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+          <label for="address" class="font-semibold w-24">Address</label>
+          <input pInputText id="address" class="flex-auto" autocomplete="off" [(ngModel)]="savedItem.address" />
+        </div>
+        <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+          <label for="details" class="font-semibold w-24">Details</label>
+          <input pInputText id="details" class="flex-auto" autocomplete="off" [(ngModel)]="savedItem.details" />
+        </div>
+        <!--
+        <div class="flex items-center gap-2 mb-4 mt20 left w100p" *ngIf="savedItem.opportunityFiles.length > 0" >
+          <label for="details" class="font-semibold w-24">Files</label>
+          <table>
+            <tr *ngFor="let fileItem of savedItem.opportunityFiles" >
+              <td><p-button label="{{fileItem.fileName}}" (onClick)="downloadFile(fileItem)" /></td>
+            </tr>
+          </table>
+        </div>
+        -->
+        <div class="flex items-center gap-2 mb-4 mt20 left w100p" *ngIf="idOpportunity > 0" >
+          <label for="files" class="font-semibold w-24">Files</label>
+          <p-fileupload #fu chooseLabel="Choose" mode="basic"
+          chooseIcon="pi pi-upload" name="file" [url]="fileUrl" (onAlterUpload)="onUpload($event)"   
+          [auto]="false" (onSelect)="onFileSelect($event)"
+          />
+          <p-button label="Upload" (onClick)="uploadFile()" severity="secondary" />
+        </div>
+        <div class="flex justify-end gap-2 left w100p">
+            <p-button label="Cancel" severity="secondary" (click)="closeOpportunity()" />
+            <p-button label="Save" (click)="editOrSave()" />
+        </div>
+      </p-tabpanel>
+      <p-tabpanel value="1" class="wNotes" *ngIf="idOpportunity > 0"  >
+        <div class="flex items-center gap-2 mb-4 wNotes" >
+          <label for="notes" class="font-semibold w-24">Notes</label>
+          <input pInputText id="notes" class="flex-auto" autocomplete="off" [(ngModel)]="note" (keyup.enter)="AddNote($event)" />
+        </div>
+        <div class="listofnotes">
+          <div class="card-container">
+            <p-card class="wNotes" *ngFor="let note of notes"  >
+              {{note.createdDate}} - {{note.note}}
+            </p-card>
+          </div>
+        </div>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+  
+</p-dialog>

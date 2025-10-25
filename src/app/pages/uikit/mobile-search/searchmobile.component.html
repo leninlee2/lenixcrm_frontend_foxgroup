@@ -1,0 +1,55 @@
+<div class="card-container mb10">
+    <p-card class="w100"   >
+        <div style="text-align: center;" >
+            <label  >&nbsp;{{opportunityCount}} Opportunities</label><br/>
+        </div>
+        <p-select [options]="statuses" placeholder="Select a Pipeline" 
+            optionLabel="name" class="w-full " (onChange)="refreshCategory()" [(ngModel)]="selectedCategory" />
+        <br/>
+        <p-select [options]="pipelineDictionaryFilter" placeholder="Select a Tab" 
+            optionLabel="name" class="w-full mt10" (onChange)="refreshPipeline()" [(ngModel)]="selectedPipeline" />
+                                          
+    </p-card>
+    <div class="w100 mt10" >
+        <p-card class="w100 mt10"  >
+            <h3 style="text-align: center;" >&nbsp;Search For Customer:
+            </h3>
+            <input pInputText id="customerName" class="flex-auto w100" autocomplete="off" [(ngModel)]="nameCustomer" />
+            <br/><br/>
+            <p-button styleClass="w-full" label="Search" (onClick)="searchByCustomer()" severity="success"  />
+        </p-card>
+    </div>
+    
+    <div *ngFor="let pipeline of availablePipelines" >
+        <div class="w100 mt10" *ngFor="let pipelineItem of pipeline.opportunityPipeline" >
+            <p-card class="w100" *ngIf="validateCustomer(pipelineItem)" (click)="openOpportunity(pipelineItem.id)"  >
+                <h3 style="text-align: center;" >&nbsp;{{pipelineItem.nameCustomer}}
+                    <!--[pTooltip]="pipelineItem.owner"-->
+                    <p-avatar tooltipPosition="top"  *ngIf="!hasProfileImage(pipelineItem)" label="{{getUserIcon(pipelineItem.owner)}}" styleClass="mr-2 right" size="normal" shape="circle" />
+                    <p-avatar tooltipPosition="top"  *ngIf="hasProfileImage(pipelineItem)" [image]="getImageProfile(pipelineItem)" styleClass="mr-2 right" size="normal" shape="circle" />
+                </h3>
+                <div><b>Opportunity Value:&nbsp;</b>{{pipelineItem.value | currency: 'USD' }}</div>
+                <div><b>Address:&nbsp;</b>{{pipelineItem.address}}</div>
+                <div><b>Phone:&nbsp;</b>{{pipelineItem.phone}}</div>
+                <div><b>Appointment:&nbsp;</b>{{pipelineItem.appointment}}</div>
+                <div><b>Owner:&nbsp;</b>{{pipelineItem.owner}}</div>
+            </p-card>
+        </div>
+    </div>
+    
+    
+</div>
+<p-dialog header="General Warning" [modal]="true" [(visible)]="generalWarnMessage" class="poppreview" [style]="{ width: '300px' }" >
+  
+  <div class="flex items-center gap-2 mb-4 ">
+    <span>{{generalMessage}}</span>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20  w100p">
+    <div class="right w100p">
+      <p-button label="Close" (onClick)="closeScreen()" severity="secondary" class="right" />
+    </div>   
+  </div>
+  
+</p-dialog>
+

@@ -1,0 +1,33 @@
+const express = require('express');
+const path = require('path');
+const app = express();
+
+// Serve static files from the dist directory
+app.use(express.static(__dirname + '/dist/sakai-ng/browser'));
+
+// Send all requests to the index.html file
+app.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname + '/dist/sakai-ng/browser/index.html'));
+});
+
+//app.get('/api/facebook/marketplace', async (req, res) => {
+//  try {
+//    const response = await axios.get('https://lenixcrm-expressov1-ee495053eabf.herokuapp.com');
+//    res.json(response.data);
+//  } catch (error) {
+//    res.status(500).send('Error fetching Facebook data');
+//  }
+//});
+
+//app.get('/proxy', async (req, res) => {
+//  const targetUrl = req.query.url;
+//  const response = await fetch(targetUrl);
+//  const html = await response.text();
+//  res.setHeader('Content-Type', 'text/html');
+//  res.send(html); // You strip or rewrite security headers here
+//});
+
+// Listen on port 3000
+app.listen(process.env.PORT || 3000, () => {
+  console.log('Server started on port ' + (process.env.PORT || 3000));
+});

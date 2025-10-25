@@ -1,0 +1,260 @@
+<div class="card-container mb10"  >
+    <p-card class="w100" >
+        <p-button styleClass="w-full" label="Home" (onClick)="goHome()" severity="success"  />
+    </p-card>
+</div>
+<div class="card-container mb10" *ngIf="enableSession('main')" >
+    <p-card class="w100" >
+        <h3 style="text-align: center;" >&nbsp;{{opportunity.nameCustomer}}</h3>
+        <div><b>Opportunity Value:&nbsp;</b>{{opportunity.value | currency: 'USD' }}</div>
+                <div><b>Pipeline:&nbsp;</b>{{selectedCategory.name}}</div>
+                <div><b>Tab:&nbsp;</b>{{selectedPipelinePop.name}}</div>
+                <div><b>Address:&nbsp;</b>{{opportunity.address}}</div>
+                <div><b>Email:&nbsp;</b>{{opportunity.email}}</div>
+                <div><b>Phone:&nbsp;</b>{{opportunity.phone}}</div>
+                <div><b>Appointment:&nbsp;</b>{{opportunity.appointment}}</div>
+                <div><b>Owner:&nbsp;</b>{{opportunity.owner}}</div>
+                <div><b>Setter:&nbsp;</b>{{opportunity.setters}}</div>
+                <div><b>Details:&nbsp;</b>{{opportunity.details}}</div>
+        <br/>
+        <p-button styleClass="w-full" label="Edit" (onClick)="startEdit()" severity="success"  />
+    </p-card>
+</div>
+<div class="card-container mb10">
+    <p-card class="w100" *ngIf="step == 0 " >
+        <h3 style="text-align: center;" >&nbsp;Customer Name?
+        </h3>
+        <input pInputText id="customerName" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.nameCustomer" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save and Proceed" (onClick)="updateNameCustomer()" severity="success"  />
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Proceed" (onClick)="next()" severity="success"  />
+        </div>
+
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+     <p-card class="w100" *ngIf="step == 1 " >
+        <h3 style="text-align: center;" >&nbsp;Phone Number?
+        </h3>
+        <input pInputText id="phoneNumber" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.phone" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save and Proceed" (onClick)="updatePhone()" severity="success"  />
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Proceed" (onClick)="next()" severity="success"  />
+        </div>
+
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+    <p-card class="w100" *ngIf="step == 2 " >
+        <h3 style="text-align: center;" >&nbsp;Address?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.address" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save and Proceed" (onClick)="updateAddress()" severity="success"  />
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Proceed" (onClick)="next()" severity="success"  />
+        </div>
+
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+    <p-card class="w100" *ngIf="step == 3 " >
+        <h3 style="text-align: center;" >&nbsp;Email?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.email" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save and Proceed" (onClick)="updateEmail()" severity="success"  />
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Proceed" (onClick)="next()" severity="success"  />
+        </div>
+
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+    <p-card class="w100" *ngIf="step == 4 " >
+        <h3 style="text-align: center;" >&nbsp;Setters?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.setters" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save and Proceed" (onClick)="updateSetters()" severity="success"  />
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Proceed" (onClick)="next()" severity="success"  />
+        </div>
+
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+    <p-card class="w100" *ngIf="step == 5 " >
+        <h3 style="text-align: center;" >&nbsp;Details?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.details" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save and Proceed" (onClick)="updateDetails()" severity="success"  />
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Proceed" (onClick)="next()" severity="success"  />
+        </div>
+
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+    <p-card class="w100" *ngIf="step == 6 " >
+        <h3 style="text-align: center;" >&nbsp;Schedulle? (the opportunity is recorded as Appointment Schedule)
+        </h3>
+        <p-datepicker id="appointment" class="flex-auto" [(ngModel)]="opportunity.appointment" 
+                   [showTime]="true"
+                   [hourFormat]="'24'"
+                   />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save and Proceed" (onClick)="updateAppointment()" severity="success"  />
+
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Proceed" (onClick)="next()" severity="success"  />
+        </div>
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+    <p-card class="w100" *ngIf="step == 7 " >
+        <h3 style="text-align: center;" >&nbsp;Pipeline/Tab?
+        </h3>
+        <p-select [options]="statuses" placeholder="Select a Pipeline" 
+            optionLabel="name" class="w-full " (onChange)="refreshTabs()" [(ngModel)]="selectedCategory" />
+        <br/>
+        <p-select [options]="pipelineDictionaryFilter" placeholder="Select a Tab" 
+            optionLabel="name" class="w-full mt10" [(ngModel)]="selectedPipelinePop" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save" (onClick)="updateTab()" severity="success"  />
+        
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Cancel" (onClick)="resetStep()" severity="success"  />
+        </div>
+    </p-card>
+</div>
+<div class="card-container mb10" (click)="viewAddNotes()" *ngIf="enableSession('addnotes')" >
+    <p-card class="w100" >
+        <h3 style="text-align: center;">&nbsp;Add Notes</h3>
+        <h6 style="text-align: center;" *ngIf="addNotesFlag" >{{opportunity.nameCustomer}}</h6>
+        <input (click)="stopClick($event)" pInputText id="notes" class="flex-auto w100" autocomplete="off" [(ngModel)]="note.note" *ngIf="addNotesFlag" />
+        <div class="mt10">
+            <p-button styleClass="w-full mt10" label="Add Note" (onClick)="addNote()" severity="success" *ngIf="addNotesFlag"  />
+        </div>
+    </p-card>
+</div>
+<div class="card-container mb10" (click)="viewNotes()" *ngIf="enableSession('viewnotes')" >
+    <p-card class="w100" >
+        <h3 style="text-align: center;">&nbsp;{{descNotes()}}</h3>
+        <h6 style="text-align: center;" *ngIf="viewNotesFlag" >{{opportunity.nameCustomer}}</h6>
+    </p-card>
+</div>
+<div class="card-container mb10" (click)="viewAddFiles()" *ngIf="enableSession('addfiles')" >
+    <p-card class="w100" >
+        <h3 style="text-align: center;">&nbsp;Add Files/Pictures</h3>
+        <h6 style="text-align: center;" *ngIf="addFilesFlag" >{{opportunity.nameCustomer}}</h6>
+    </p-card>
+</div>
+<div class="card-container mb10" (click)="viewTakePicture()" *ngIf="addFilesFlag" >
+    <p-card class="w100" >
+        <h3 style="text-align: center;">&nbsp;Take Picture</h3>
+        <div *ngIf="viewTakePictureFlag" style="text-align: center;" >
+            <video #video autoplay playsinline></video>
+        </div>
+        <!-- Hidden canvas used to grab the snapshot -->
+        <canvas #canvas style="display: none;"></canvas>
+        <div class="mt10" *ngIf="viewTakePictureFlag" style="text-align: center;" >
+            &nbsp;
+            <p-select [options]="fileTypes" placeholder="Select a File Type" 
+                  optionLabel="name" class="w-full md:w-56 w100" (onClick)="stopClick($event)" [(ngModel)]="fileTypeForSave" />
+            &nbsp;
+            <br/>
+            <p-button styleClass="w-full mt10" label="Take Picture" (onClick)="uploadPhoto($event)" severity="success"  />
+        </div>
+    </p-card>
+</div>
+<div class="card-container mb10" *ngIf="addFilesFlag" (click)="viewUploadDocuments()" >
+    <p-card class="w100" >
+        <h3 style="text-align: center;">&nbsp;Upload Document</h3>
+        <div *ngIf="viewUploadDocumentsFlag" (onClick)="stopClick($event)"  >
+            <input type="file" (change)="onFileSelected($event)" (onClick)="stopClick($event)" class="w100" />
+             &nbsp;
+            <p-select [options]="fileTypes" placeholder="Select a File Type" 
+                  optionLabel="name" class="w-full md:w-56 w100" (onClick)="stopClick($event)" [(ngModel)]="fileTypeForSave" />
+            &nbsp;
+            <br/>
+            <div class="mt10">
+                <p-button styleClass="w-full mt10" label="Upload File" (onClick)="uploadFile($event)" severity="success"  />
+            </div>
+            <div class="mt10">
+                <p-button styleClass="w-full mt10" label="Close" (onClick)="viewUploadDocumentsFlag=false;addFilesFlag=false;" severity="success"  />
+            </div>
+            
+        </div>
+    </p-card>
+</div>
+<div class="card-container mb10" (click)="viewFiles()" *ngIf="enableSession('viewfiles')" >
+    <p-card class="w100" >
+        <h3 style="text-align: center;">&nbsp;{{descFiles()}}</h3>
+        <h6 style="text-align: center;" *ngIf="viewFilesFlag" >{{opportunity.nameCustomer}}</h6>
+    </p-card>
+</div>
+<div *ngIf="viewNotesFlag" >
+  <div class="card-container mb10" *ngFor="let note of notes"  >
+     <p-card class="w100" >
+         <h5>{{note.createdDate | date: 'MM/dd/yyyy HH:mm' }}</h5>
+         <br/>
+         <label style="text-align: center;">&nbsp;{{note.note}}</label>
+     </p-card>
+  </div>
+</div>
+<div *ngIf="viewFilesFlag" >
+  <div *ngFor="let fileType of fileTypes" >
+        <div class="card-container mb10" *ngFor="let file of fileType.opportunityFilesS3"   >
+            <p-card class="w100" (click)="previewFileS3(file.id)" >
+                <h5>{{fileType.name }}</h5>
+                <br/>
+                <label style="text-align: center;">&nbsp;{{file.path}}</label>
+            </p-card>
+        </div>
+  </div>
+</div>
+
+<p-dialog header="Preview Image" [modal]="true" [(visible)]="openPreviewImage" class="poppreview" [style]="{ width: '100%' }" >
+  
+  <div class="flex items-center gap-2 mb-4 ">
+    <iframe [src]="previewImage" width="100%" height="600px"></iframe>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+    <p-button label="Close" (onClick)="openPreviewImage = false" severity="secondary" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="General Warning" [modal]="true" [(visible)]="generalWarnMessage" class="poppreview" [style]="{ width: '100% !important' }" >
+  
+  <div class="flex items-center gap-2 mb-4 ">
+    <span>{{generalMessage}}</span>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20  w100p">
+    <div class="right w100p">
+      <p-button label="Close" (onClick)="generalWarnMessage = false" severity="secondary" class="right" />
+    </div>   
+  </div>
+  
+</p-dialog>
+

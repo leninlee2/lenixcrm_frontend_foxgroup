@@ -1,0 +1,15 @@
+.w100{
+    width: 100% !important;
+  }
+
+.mb10{
+    margin-bottom: 10px !important;
+}
+
+.poppipeline{
+  min-width: 500px !important;
+}
+
+.pointer{
+  cursor: pointer;
+}

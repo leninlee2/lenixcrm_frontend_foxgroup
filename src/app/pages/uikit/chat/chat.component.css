@@ -1,0 +1,198 @@
+.top-card{
+    margin-top: 50px;
+    width: 100% !important;
+}
+
+.bot-card{
+    width: 100% !important;
+    height: 25px;
+    margin-bottom: 5px !important;
+}
+
+::ng-deep p-card .p-card {
+  margin-bottom: 5px !important;
+}
+
+::ng-deep p-card[data-custom="lightblue"] .p-card {
+  background-color: rgb(130,234,169) !important;
+  font-weight: bold;
+}
+
+::ng-deep p-card[data-custom="lightgray"] .p-card {
+  background-color: rgb(241,245,249) !important;
+  font-weight: bold;
+}
+
+.p-card.p-component {
+  margin-bottom: 5px !important;
+}
+
+.top-card-low{
+    margin-top: 5px;
+    width: 100% !important;
+}
+
+.chat-container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: white;
+  }
+  
+  .chat-message {
+    display: flex;
+    justify-content: flex-start;
+    padding: 5px 0;
+  }
+  
+  .chat-message.sent {
+    justify-content: flex-end;
+  }
+  
+  .message-card {
+    width: auto;
+    max-width: 70%;
+    border-radius: 10px;
+  }
+  
+  .message-card .p-card-header {
+    background-color: #e0e0e0;
+    font-size: 12px;
+    padding: 5px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .message-card .p-card-body {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+    font-size: 14px;
+  }
+  
+  .chat-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-input input {
+    width: 80%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .chat-input button {
+    padding: 10px 15px;
+    background-color: #25d366;
+    border: none;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .chat-input button:hover {
+    background-color: #128c7e;
+  }
+  
+  .chat-message.sent .message-card .p-card-header {
+    background-color: #25d366;
+    color: white;
+  }
+  
+  .chat-message.received .message-card .p-card-header {
+    background-color: #ece5dd;
+  }
+
+  .chat-limit{
+    height: 450px;
+    overflow: scroll;
+    flex-direction: column-reverse;
+    width: 100%;
+    float: left;
+  }
+
+  .right{
+    float: right;
+  }
+
+  .p-opportunity{
+    min-width: 500px !important;
+  }
+
+  .pointer{
+    cursor: pointer;
+  }
+
+  .hight-messages{
+    height: 1000px;
+    overflow: scroll;
+    vertical-align: top;
+  }
+
+  .card-from{
+    margin-top: -20px;
+    width: 420px;
+  }
+
+  .card-topb{
+    width: 420px;
+  }
+
+  .card-buttoms{
+    margin-right: 10px;
+  }
+
+  .b-green{
+    background-color: green !important;
+  }
+
+   .b-lgreen{
+    background-color: lightgreen !important;
+  }
+
+  .topcard{
+    margin-top: -10px !important;
+  }
+
+  .center-text{
+    text-align: center !important;
+    border-style: solid;
+    width: 100% !important;
+    justify-content: center;
+    display: flex;
+  }
+
+  .w100all{
+    width: 100%;
+  }
+
+   .b-lgray{
+    background-color: lightgray !important;
+  }
+
+  .ml5{
+    margin-left: 5px;
+  }
+
+  .mt-overcircle{
+    margin-top: -25px !important;
+    margin-left: 10px !important;
+    /*position:absolute !important;*/
+  }
+
+  .count-messages{
+    margin-top: -15px !important;
+  }
+  

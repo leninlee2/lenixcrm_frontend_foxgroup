@@ -1,0 +1,247 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;Users/Salesman</h3><br/>
+        <p-button (click)="openGroupPopup()" label="Manage Groups"  />
+        &nbsp;
+        <p-button (click)="openNewUser()" label="Create User"  />
+    </p-card>
+</div>
+
+<p-table [value]="users" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #header>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Groups</th>
+            <th>Email</th>
+            <th>Created</th>
+            <th *ngIf="isOwner" >Payments</th>
+            <th>Access Group</th>
+            <th>/</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-user>
+        <tr  >
+            <td><i class="pi pi-ellipsis-v pointer" style="color: slateblue" (click)="openUser(user,'0',$event)"></i></td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.groupName }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.createdDate }}</td>
+            <td *ngIf="isOwner" >
+                <i class="pi pi-pencil pointer" style="color: slateblue"  (click)="openPayments(user,'1',$event)"   ></i>
+            </td>
+            <td >
+                <i class="pi pi-pencil pointer" style="color: slateblue"  (click)="openUser(user,'1',$event)"   ></i>   
+              </td>
+              <td >
+                <i class="pi pi-trash pointer" style="color: slateblue" (click)="deleteUser(user,$event)"  ></i>   
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog header="Add/Edit User" [modal]="true" [(visible)]="openedUser" class="poppipeline" >
+          <p-tabs [(value)]="index" >
+            <p-tablist>
+                <p-tab value="0">User Information</p-tab>
+                <p-tab value="1">User Groups</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <span class="p-text-secondary block mb-8 p-opportunity poppipeline">User Information.
+                    </span>
+                    <div class="flex items-center gap-2 mb-4">
+                        <label for="user" class="font-semibold w-24">Picture</label>
+                        <p-fileupload #fu chooseLabel="Choose" mode="basic"
+                            chooseIcon="pi pi-upload" name="file" [url]="fileUrl" (onAlterUpload)="onUpload($event)"   
+                            [auto]="false" (onSelect)="onFileSelect($event)"
+                        />
+                        
+                        <p-button label="Upload" (onClick)="uploadFile()" severity="secondary" />
+                        <p-avatar *ngIf="!hasProfileImage()" label="{{getUserIcon(user.name)}}" styleClass="mr-2 right" size="large" shape="circle" />
+                        <p-avatar *ngIf="hasProfileImage()" [image]="avatarImageUrl" styleClass="mr-2 right" size="large" shape="circle" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <label for="user" class="font-semibold w-24">Full Name</label>
+                        <input pInputText id="name" class="flex-auto" autocomplete="off" [(ngModel)]="user.name" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-4">
+                      <label for="email" class="font-semibold w-24">Email</label>
+                      <input pInputText id="email" class="flex-auto" autocomplete="off" [(ngModel)]="user.email" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-4 mt20 w30p left" >
+                      <label for="password" class="font-semibold w-24">Password</label>
+                      <p-password id="password" class="flex-auto" autocomplete="off" [(ngModel)]="user.password" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-2 w50p left">
+                      <label for="phone" class="font-semibold w-24">&nbsp;Phone</label>
+                      <input pInputText id="phone" class="flex-auto" autocomplete="off" [(ngModel)]="user.phone" />
+                    </div>
+                    <div class="flex justify-end gap-2 left w100p">
+                        <p-button label="Cancel" severity="secondary" (click)="closeUser()" />
+                        <p-button label="Save" (click)="saveUser()" />
+                    </div>
+                </p-tabpanel>
+                      
+                <p-tabpanel  value="1">
+                    <div class="flex items-center gap-2 mb-4 w100">
+                        <table class="poppipeline">
+                            <tr>
+                                <td><label for="user" class="font-semibold ">Group Name</label><br/></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p-autocomplete [(ngModel)]="groupByUser" [suggestions]="filteredGroups" (keydown.enter)="addUserGroup($event)"
+                                    optionLabel="name" (completeMethod)="filterGroups($event)" class="flex-auto w100"  />&nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <br/>
+                                <p-table [value]="userGroups" [tableStyle]="{ 'min-width': '50rem' }">
+                                    <ng-template #header>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Created</th>
+                                            <th>/</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-group>
+                                        <tr >
+                                            <td>{{ group.groupName }}</td>
+                                            <td>{{ group.createDate }}</td>
+                                            <td >
+                                                <i class="pi pi-trash" style="color: slateblue" (click)="deleteUserGroup(group,$event)"  ></i>   
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </tr>
+                        </table>
+                        
+                        
+                        
+                    </div>
+                  
+                </p-tabpanel>
+            </p-tabpanels>
+          </p-tabs>
+    
+  </p-dialog>
+
+  <p-dialog header="Manage Access Groups" [modal]="true" [(visible)]="openedGroup" class="poppipeline" >
+          <div class="flex items-center gap-2 mb-4">
+              <label for="user" class="font-semibold w-24">Name</label>
+              <input pInputText id="name" class="flex-auto" autocomplete="off" [(ngModel)]="accessGroup.name" />
+          </div>
+          <div class="flex justify-end gap-2 left w100p">
+              <p-button label="Cancel" severity="secondary" (click)="closeGroup()" />
+              <p-button *ngIf="accessGroup.id > 0" label="Reset" severity="secondary" (click)="resetGroup()" />
+              <p-button [label]="getGroupLabelName()" (click)="saveGroup()" />
+          </div>
+          <br/>
+          <p-table [value]="accessGroups" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>Name</th>
+                    <th>Created</th>
+                    <th>Edit</th>
+                    <th>/</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-group>
+                <tr  >
+                    <td>
+                        <i class="pi pi-ellipsis-v" style="color: slateblue"  (click)="openGroupMenu(group,$event)"  ></i>
+                    </td>
+                    <td>{{ group.name }}</td>
+                    <td>{{ group.createDate }}</td>
+                    <td *ngIf="group.id == 1">-</td>
+                    <td *ngIf="group.id == 1">-</td>
+                    <td *ngIf="group.id > 1">
+                        <i class="pi pi-pencil" style="color: slateblue"  (click)="editAcessGroup(group,$event)"  ></i>   
+                    </td>
+                    <td *ngIf="group.id > 1">
+                        <i class="pi pi-trash" style="color: slateblue" (click)="deleteGroup(group,$event)"  ></i>   
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    
+  </p-dialog>
+
+  <p-dialog header="Group Detail - Menus/Pipeline" [modal]="true" [(visible)]="openedGroupDetail" class="poppipeline" >
+    <p-tabs value="0" >
+        <p-tablist>
+            <p-tab value="0">Menus</p-tab>
+            <p-tab value="1">Pipeline</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+            <p-tabpanel value="0">
+                <div class="flex items-center gap-2 mb-4">
+                            <label for="user" class="font-semibold w-24">Menu</label><br/>
+                            <p-select [options]="menus" placeholder="Select a Menu for Group" 
+                                    optionLabel="name" class="w-full md:w-56 w100"  [(ngModel)]="menu" appendTo="body" />
+                </div>
+                        <div class="flex justify-end gap-2 left w100p">
+                            <p-button label="Cancel" severity="secondary" (click)="openedGroupDetail = false" />
+                            <p-button label="Save" (click)="saveGroupMenu()" />
+                        </div>
+                        <br/>
+                        <p-table [value]="groupMenus" [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template #header>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Created</th>
+                                    <th>/</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-group>
+                                <tr >
+                                    <td>{{ group.name }}</td>
+                                    <td>{{ group.createDate }}</td>
+                                    <td *ngIf="group.id == 1">-</td>
+                                    <td *ngIf="group.id == 1">-</td>
+                                    <td *ngIf="group.id > 1">
+                                        <i class="pi pi-trash" style="color: slateblue" (click)="InactivateGroupMenu(group,$event)"  ></i>   
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+            </p-tabpanel>
+            <p-tabpanel value="1">
+                <div class="flex items-center gap-2 mb-4">
+                    <label for="user" class="font-semibold w-24">Pipeline</label><br/>
+                    <p-select [options]="categories" placeholder="Select a Pipeline" 
+                                    optionLabel="name" class="w-full md:w-56 w100"  [(ngModel)]="category" appendTo="body" />
+                </div>
+                        <div class="flex justify-end gap-2 left w100p">
+                            <p-button label="Cancel" severity="secondary" (click)="openedGroupDetail = false" />
+                            <p-button [label]="getGroupLabelName()" (click)="saveGroupPipeline()" />
+                        </div>
+                        <br/>
+                        <p-table [value]="groupPipelines" [tableStyle]="{ 'min-width': '50rem' }">
+                            <ng-template #header>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Created</th>
+                                    <th>/</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-group>
+                                <tr >
+                                    <td>{{ group.name }}</td>
+                                    <td>{{ group.createDate }}</td>
+                                    <td *ngIf="group.id == 1">-</td>
+                                    <td *ngIf="group.id == 1">-</td>
+                                    <td *ngIf="group.id > 1">
+                                        <i class="pi pi-trash" style="color: slateblue" (click)="inactivateGroupPipeline(group,$event)"  ></i>   
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+          
+    
+  </p-dialog>

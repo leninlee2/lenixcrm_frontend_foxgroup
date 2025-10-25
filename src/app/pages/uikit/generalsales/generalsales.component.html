@@ -1,0 +1,142 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;General Sales</h3>
+                <h5>&nbsp;Period&nbsp;<p-datepicker id="datePeriod" class="flex-auto" 
+                  [(ngModel)]="generalSale.saleDate" view="month" dateFormat="mm/yy" (onSelect)="getAllGeneralSales()" /></h5>
+    </p-card>
+</div>
+<div class="card-container mb10">
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">Montly Sales</p-tab>
+      <p-tab value="1">Stock</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <table class="w100">
+          <tr>
+            <td  style="width: 50% !important;" >
+              <p-card >
+                
+                <table class="w100" >
+                    <tr>
+                      <td  colspan="4" >
+                        <label for="customer" class="font-semibold w-24 mb5">Customer&nbsp;</label><br/>
+                        <p-autocomplete [(ngModel)]="customer" [suggestions]="filteredCustomers" 
+                        optionLabel="name" (completeMethod)="filterCustomers($event)" class="flex-auto w100"  />&nbsp;
+                      </td>
+                      <td   colspan="2" >
+                        <label for="salesman" class="font-semibold w-24 mb5">Salesman&nbsp;</label><br/>
+                        <p-autocomplete [(ngModel)]="salesman" [suggestions]="filteredSalesman" 
+                        optionLabel="name" (completeMethod)="filterSalesman($event)" class="flex-auto w100"  />&nbsp;
+                      </td>
+                      <td  colspan="2" >
+                        <label for="product" class="font-semibold w-24 mb5">Product&nbsp;</label><br/>
+                        <p-autocomplete [(ngModel)]="productItem" [suggestions]="filteredProductServices" 
+                        optionLabel="name" (completeMethod)="filterProduct($event)" class="flex-auto w100"  />&nbsp;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td   >
+                        <label for="value" class="font-semibold w-24 mb5">Unity Price&nbsp;</label><br/>
+                        <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="generalSale.unityPrice" />&nbsp;
+                      </td>
+                      <td   >
+                        <label for="value" class="font-semibold w-24 mb5">Amount&nbsp;</label><br/>
+                        <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="generalSale.amount" />&nbsp;
+                      </td>
+                      <td  >
+                        <label for="paid" class="font-semibold w-24 mb5">Paid?&nbsp;</label><br/>
+                        <p-toggleswitch [(ngModel)]="generalSale.paid" />&nbsp;
+                      </td>
+                      <td  >
+                        <label for="delivered" class="font-semibold w-24 mb5">Delivered?&nbsp;</label><br/>
+                        <p-toggleswitch [(ngModel)]="generalSale.delivered" />&nbsp;
+                      </td>
+                      <td   >
+                        <label for="value" class="font-semibold w-24 mb5">Internal Cost&nbsp;</label><br/>
+                        <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="generalSale.cost" />&nbsp;
+                      </td>
+                      <td  class="w12" >
+                        <label for="value" class="font-semibold w-24 mb5">Sale Date&nbsp;</label><br/>
+                        <p-datepicker id="datePeriod" class="flex-auto w100" [(ngModel)]="generalSale.saleDate"  />&nbsp;
+                      </td>
+                      <td  class="w12" >
+                        <label for="value" class="font-semibold w-24 mb5">Payment Date&nbsp;</label><br/>
+                        <p-datepicker id="datePeriod" class="flex-auto w100" [(ngModel)]="generalSale.paymentDate"  />&nbsp;
+                      </td>
+                      <td  class="w12" colspan="2" >
+                        <label for="value" class="font-semibold w-24 mb5">Payment Mode&nbsp;</label><br/>
+                        <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="generalSale.paymentMode" />&nbsp;
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="8"  >
+                        <br/><br/>
+                        <p-button [label]="getStateGeneralControl()" severity="success" class="right ml5 mb5" (click)="addGeneralSale()"  />
+                        &nbsp;<p-button *ngIf="generalSale.id > 0" label="Reset" severity="success" class="right ml5 mb5" (click)="resetGeneralSale()"  />&nbsp;
+                        
+                      </td>
+                    </tr>          
+                </table>
+                <p-table [value]="generalSales" [style]="{ 'width': '100%' }" class="mb10" >
+                  <ng-template #header>
+                      <tr>
+                          <th>Customer</th>
+                          <th>Salesman</th>
+                          <th>Product</th>
+                          <th>Unity Price</th>
+                          <th>Amount</th>
+                          <th>Total Sale</th>
+                          <th>Cost</th>
+                          <th>Profit</th>
+                          <th>Sale Date</th>
+                          <th>Payment Date</th>
+                          <th>Payment Mode</th>
+                          <th>Paid?</th>
+                          <th>Delivered?</th>
+                          <th>-</th>
+                          <th>-</th>
+                      </tr>
+                  </ng-template>
+                  <ng-template #body let-row  >
+                  <tr  >
+                          <td>{{ row.customerName }}</td>
+                          <td>{{ row.salesman}}</td>
+                          <td>{{ row.productName }}</td>
+                          <td>{{ row.unityPrice | currency: 'USD'}}</td>
+                          <td>{{ row.amount  }}</td>
+                          <td>{{ row.totalPrice | currency: 'USD' }}</td>
+                          <td>{{ row.cost | currency: 'USD' }}</td>
+                          <td>{{ row.profit | currency: 'USD' }}</td>
+                          <td>{{ row.saleDate | date  }}</td>
+                          <td>{{ row.createDate | date }}</td>
+                          <td>{{ row.paymentMode }}</td>
+                          <td *ngIf="row.paid"><i class="pi pi-check" style="color: slateblue"  ></i> </td>
+                          <td *ngIf="!row.paid"><i class="pi pi-times" style="color: slateblue"  ></i> </td>
+                          <td *ngIf="row.delivered"><i class="pi pi-check" style="color: slateblue"  ></i> </td>
+                          <td *ngIf="!row.delivered"><i class="pi pi-times" style="color: slateblue"  ></i> </td>
+                          <td >
+                            <i class="pi pi-pencil" style="color: slateblue" (click)="editSalesGeneral(row)"  ></i>   
+                          </td>
+                          <td >
+                            <i class="pi pi-trash" style="color: slateblue" (click)="inactiveSalesGeneral(row)"  ></i>   
+                          </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+      
+              </p-card>
+            </td>
+          </tr>
+        </table>
+      </p-tabpanel>
+      <p-tabpanel value="1">
+
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+  
+  
+  
+</div>

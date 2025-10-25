@@ -1,0 +1,106 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;Sales Triage</h3>
+    </p-card>
+</div>
+
+<div class="card-container mb10">
+  <table class="w100">
+    <tr>
+      <td  style="width: 50% !important;" >
+        <p-card >
+          <h3>&nbsp;Montly Sales</h3>
+          <h5><p-datepicker id="datePeriod" class="flex-auto" 
+            [(ngModel)]="salesGeneralControl.datePeriod" view="month" dateFormat="mm/yy" (onSelect)="getAllTriage()" /></h5>
+          <table class="w100" >
+              <tr class="rowSize">
+                <td class="w25" >
+                  <label for="customer" class="font-semibold w-24 mb5">Customer&nbsp;</label><br/>
+                  <p-autocomplete [(ngModel)]="customer" [suggestions]="filteredCustomers" 
+                  optionLabel="name" (completeMethod)="filterCustomers($event)" class="flex-auto w100"  />&nbsp;
+                </td>
+                <td  class="w25" >
+                  <label for="salesman" class="font-semibold w-24 mb5">Salesman&nbsp;</label><br/>
+                  <p-autocomplete [(ngModel)]="salesman" [suggestions]="filteredSalesman" 
+                  optionLabel="name" (completeMethod)="filterSalesman($event)" class="flex-auto w100"  />&nbsp;
+                </td>
+                <td  class="w25" >
+                  <label for="value" class="font-semibold w-24">Total Sale&nbsp;</label><br/>
+                  <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesCommissionTriage.value" />&nbsp;
+                </td>
+                <td  class="w25">
+                  <label for="percent" class="font-semibold w-24 ">Percent Sale&nbsp;</label><br/>
+                  <input pInputText id="percent" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesCommissionTriage.percent" />&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td  class="w25" >
+                  <label for="cm1" class="font-semibold w-24 mb5">CM1&nbsp;</label><br/>
+                  <input pInputText id="cm1" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesCommissionTriage.cM1" />&nbsp;
+                </td>
+                <td  class="w25">
+                  <label for="percent" class="font-semibold w-24 mb5">CM1 Value&nbsp;</label><br/>
+                  <input pInputText id="percent" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesCommissionTriage.cM1Value" />&nbsp;
+                </td>
+                <td  class="w25" >
+                  <label for="value" class="font-semibold w-24 mb5">CM2&nbsp;</label><br/>
+                  <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesCommissionTriage.cM2" />&nbsp;
+                </td>
+                <td  class="w25">
+                  <label for="percent" class="font-semibold w-24 mb5">CM2 Value&nbsp;</label><br/>
+                  <input pInputText id="percent" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesCommissionTriage.cM2Value" />&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4" >
+                  &nbsp;
+                  <p-button [label]="getStateGeneralControl()" severity="success" class="right ml5 mb5" (click)="addSaleTriage()"  />
+                  <p-button *ngIf="salesCommissionTriage.id > 0" label="Reset" severity="success" class="right ml5 mb5" (click)="resetTriage()"  />&nbsp;
+                  <br/><br/>
+                </td>
+              </tr>          
+          </table>
+          <p-table [value]="saleCommissionTriages" [style]="{ 'width': '100%' }" class="mb10" >
+            <ng-template #header>
+                <tr>
+                    <th>Customer</th>
+                    <th>Salesman</th>
+                    <th>Project Value</th>
+                    <th>Percent Triage</th>
+                    <th>Commission</th>
+                    <th>CM1</th>
+                    <th>CM1 - Value</th>
+                    <th>CM2</th>
+                    <th>CM2 - Value</th>
+                    <th>-</th>
+                    <th>-</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-row  >
+            <tr  >
+                    <td>{{ row.customer }}</td>
+                    <td>{{ row.salesman}}</td>
+                    <td >{{ row.value | currency: 'USD'}}</td>
+                    <td>{{ row.percent}}</td>
+                    <td>{{ row.commission | currency: 'USD' }}</td>
+                    <td>{{ row.cM1 }}</td>
+                    <td>{{ row.cM1Value | currency: 'USD' }}</td>
+                    <td>{{ row.cM2 }}</td>
+                    <td>{{ row.cM2Value | currency: 'USD' }}</td>
+                    <td >
+                      <i class="pi pi-pencil" style="color: slateblue" (click)="editSalesTrial(row)"  ></i>   
+                    </td>
+                    <td >
+                      <i class="pi pi-trash" style="color: slateblue" (click)="inactiveSalesTriage(row)"  ></i>   
+                    </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+        </p-card>
+      </td>
+    </tr>
+  </table>
+  
+  
+</div>

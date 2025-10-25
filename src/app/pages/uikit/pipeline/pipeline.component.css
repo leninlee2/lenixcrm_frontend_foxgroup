@@ -1,0 +1,268 @@
+.container {
+    margin: 50px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h3 {
+    margin-bottom: 20px;
+  }
+  
+  p-listbox {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+
+  .w100px{
+    width: 100px !important;
+  }
+
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* Add some space between the cards */
+    justify-content: left; /* Distribute the cards evenly */
+  }
+  
+  .custom-card {
+    width: 400px !important; /* Set a specific width for each card */
+    margin: 10px; /* Add some space around each card */
+    float: left !important;
+  }
+
+  .product-description{
+    width: 300px !important;
+  }
+
+  .subcard{
+    /*margin-bottom: -7px !important;*/
+    min-width: 100% !important;
+    height: 135px !important;
+    /*margin-bottom: 5px !important;*/
+  }
+
+  .h100{
+    min-height: 400px !important;
+  }
+
+  .w100{
+    width: 100% !important;
+  }
+
+  .h-card{
+    height: 500px !important;
+  }
+
+  .right{
+    float: right !important;
+  }
+
+  .ml5{
+    margin-left: 5px;
+  }
+
+  .bsolid{
+    border-style: solid;
+    border-color: black;
+  }
+
+  .w50p{
+    width: 50% !important;
+  }
+
+  .w30p{
+    width: 30% !important;
+  }
+
+  .w100p{
+    width: 100% !important;
+  }
+
+  .left{
+    float: left !important;
+  }
+
+  .mt20{
+    margin-top: 20px !important;
+  }
+
+  .poppipeline{
+    height: 200px !important;
+    width: 50rem;
+    overflow: scroll;
+  }
+
+  .poppreview{
+    height: 500px !important;
+    min-width: 600px !important;
+    overflow: scroll;
+  }
+
+  .right{
+    float:right !important;
+  }
+
+  .mt5{
+    margin-top: 5px !important;
+  }
+
+  .wNotes{
+    width: 1000px !important;
+  }
+
+  .listofnotes{
+    width: 1000px;
+    height: 200px;
+    overflow: scroll !important;
+  }
+
+  .limit-pipelines{
+    min-width: 100% !important;
+    /*height: 550px !important;*/
+    overflow-y: scroll;
+  }
+
+  .p-card {
+    float: left;
+    margin-right: 20px; /* Optional, to create space between cards */
+  }
+
+  .atop{
+    vertical-align: top; /* Ensures the card stays aligned with the top of the cell */
+  }
+
+  .pointer{
+    cursor: pointer;
+  }
+
+  .wWarning{
+    width: 500px !important;
+  }
+
+  .bgray{
+    background-color: rgb(62,82,89) !important; /*lightgreen !important;*/
+  }
+  
+  .addcart{
+    height: 108px !important;
+    margin-top:-15px !important
+  }
+
+  .mtopr{
+    margin-top: -25px !important;
+  }
+
+  .w500{
+    min-width: 500px;
+  }
+
+  .mb10{
+    margin-bottom: 10px !important;
+  }
+
+  .card-limiter{
+    height: 50px !important;
+    border-style:solid !important;
+    overflow: hidden;
+  }
+
+  .mb-lines-card{
+    margin-top:5px !important;
+  }
+
+  .mb-card2{
+    margin-bottom: 10px !important;
+  }
+
+  .trash-level{
+    margin-top: -20px;
+    margin-right: 10px;
+  }
+
+  .w300px{
+    min-width: 300px !important;
+  }
+
+  ::ng-deep .p-autocomplete .p-inputtext {
+    width: 400px;
+  }
+
+  .mt-input{
+    margin-top:2px !important;
+  }
+
+  .spaceform{
+    border-collapse: separate;
+    border-spacing: 12px;
+  }
+
+  ::ng-deep .full-width-upload {
+  width: 100% !important;
+}
+
+::ng-deep .full-width-upload .p-fileupload-buttonbar,
+::ng-deep .full-width-upload .p-fileupload-content {
+  width: 100% !important;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+}
+
+::ng-deep .full-width-upload .p-button {
+  flex-grow: 1;
+  min-width: 100px;
+}
+
+.file-width{
+  width: 500px;
+}
+
+::ng-deep .p-fileupload.p-fileupload-advanced{
+  width: 1000px !important;
+  margin-top:5px;
+}
+
+.wattendance{
+  width: 22% !important;
+}
+
+.title-supertab{
+  width: 300px;
+  height: 30px;
+  overflow: hidden;
+}
+
+.supertab-body{
+  height: 500px;
+  overflow: scroll !important;
+}
+
+.limit-address{
+  width: 250px;
+  height: 20px;
+  overflow: hidden;
+}
+
+.line-criticity{
+  border-top-width: 4px; 
+  border-top-style: solid; 
+  border-top-color: #007ad9; 
+  margin-top:-10px;
+}
+
+.mycolor{
+  width: 20px;
+  height: 20px;
+  background-color: red;
+}
+
+.test-back{
+  background-color: red;
+}
+
+.ml5px{
+  margin-left: 5px;
+}
+
+
+  

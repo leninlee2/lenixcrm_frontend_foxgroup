@@ -1,0 +1,206 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;Sales Commission</h3>
+        <p-button label="Salesman Incomes" severity="success" class="ml5 mb5" (onClick)="openSalesIncome()" />
+        <p-button label="Manager Over Sellers" severity="success" class="ml5 mb5" (onClick)="openManagerIncome()" />
+        <br/>
+    </p-card>
+</div>
+
+<div class="card-container mb10">
+  <table class="w100">
+    <tr>
+      <td  style="width: 50% !important;" >
+        <p-card >
+          <h3>&nbsp;Montly Sales</h3>
+          <h5><p-datepicker id="datePeriod" class="flex-auto" 
+            [(ngModel)]="salesGeneralControl.datePeriod" view="month" dateFormat="mm/yy" (onSelect)="getAllGeneralSales()" /></h5>
+          <table class="w100" >
+              <tr>
+                <td class="w25" >
+                  <label for="customer" class="font-semibold w-24 mb5">Customer&nbsp;</label><br/>
+                  <p-autocomplete [(ngModel)]="customer" [suggestions]="filteredCustomers" 
+                  optionLabel="name" (completeMethod)="filterCustomers($event)" class="flex-auto w100"  />&nbsp;
+                </td>
+                <td  class="w25" colspan="2">
+                  <label for="salesman" class="font-semibold w-24 mb5">Salesman&nbsp;</label><br/>
+                  <p-autocomplete [(ngModel)]="salesman" [suggestions]="filteredSalesman" 
+                  optionLabel="name" (completeMethod)="filterSalesman($event)" class="flex-auto w100"  />&nbsp;
+                </td>
+                <td  class="w25">
+                  <label for="manager" class="font-semibold w-24 mb5">Manager&nbsp;</label><br/>
+                  <p-autocomplete [(ngModel)]="manager" [suggestions]="filteredManager" 
+                  optionLabel="name" (completeMethod)="filterManager($event)" class="flex-auto w100"  />&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td  class="w25" >
+                  <label for="value" class="font-semibold w-24 mb5">Total Sale&nbsp;</label><br/>
+                  <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesGeneralControl.value" />&nbsp;
+                </td>
+                <td  class="w12" >
+                  <label for="value" class="font-semibold w-24 mb5">Payment Date&nbsp;</label><br/>
+                  <p-datepicker id="datePeriod" class="flex-auto w100" [(ngModel)]="salesGeneralControl.paymentDate"  />&nbsp;
+                </td>
+                <td  class="w12" >
+                  <label for="value" class="font-semibold w-24 mb5">Payment Mode&nbsp;</label><br/>
+                  <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesGeneralControl.paymentMode" />&nbsp;
+                </td>
+                <td  class="w25">
+                  <label for="isManager" class="font-semibold w-24 mb5">Sale by a Manager?&nbsp;</label><br/>
+                  <p-toggleswitch [(ngModel)]="salesGeneralControl.isManager" />&nbsp;
+                </td>
+                <td  class="w25" *ngIf="salesGeneralControl.isManager">
+                  <label for="specialPercent" class="font-semibold w-24 mb5">Percent Manager&nbsp;</label><br/>
+                  <input pInputText id="specialPercent" class="flex-auto  w98" autocomplete="off" [(ngModel)]="salesGeneralControl.specialPercent" />&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4" *ngIf="!salesGeneralControl.isManager" >
+                  &nbsp;<p-button *ngIf="salesGeneralControl.id > 0" label="Reset" severity="success" class="right ml5 mb5" (click)="resetGeneralSale()"  />&nbsp;
+                  <p-button [label]="getStateGeneralControl()" severity="success" class="right ml5 mb5" (click)="addSalesGeneralControl()"  /><br/><br/>
+                </td>
+                <td colspan="5" *ngIf="salesGeneralControl.isManager" >
+                  &nbsp;
+                  <p-button [label]="getStateGeneralControl()" severity="success" class="right ml5 mb5" (click)="addSalesGeneralControl()"  />
+                  <p-button *ngIf="salesGeneralControl.id > 0" label="Reset" severity="success" class="right ml5 mb5" (click)="resetGeneralSale()"  />&nbsp;
+                  <br/><br/>
+                </td>
+              </tr>          
+          </table>
+          <p-table [value]="salesGeneralControls" [style]="{ 'width': '100%' }" class="mb10" >
+            <ng-template #header>
+                <tr>
+                    <th>Customer</th>
+                    <th>Salesman</th>
+                    <th> Manager?</th>
+                    <th>Time/Sales Amount</th>
+                    <th>Total Value</th>
+                    <th>% Application</th>
+                    <th>Commission</th>
+                    <th>Is it Paid?</th>
+                    <th>Payment Mode</th>
+                    <th>Payment Date</th>
+                    <th>Manager</th>
+                    <th>% Manager</th>
+                    <th>Commission Manager</th>
+                    <th>-</th>
+                    <th>-</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-row  >
+            <tr  >
+                    <td>{{ row.customer }}</td>
+                    <td>{{ row.salesman}}</td>
+                    <td *ngIf="row.isManager"><i class="pi pi-check" style="font-size: 1rem"></i></td>
+                    <td *ngIf="!row.isManager"><i class="pi pi-times" style="font-size: 1rem"></i></td>
+                    <td>{{ row.order}}</td>
+                    <td>{{ row.value | currency: 'USD' }}</td>
+                    <td>{{ row.percent }}</td>
+                    <td>{{ row.commission }}</td>
+                    <td *ngIf="row.hasPayment"><i class="pi pi-check" style="font-size: 1rem"></i></td>
+                    <td *ngIf="!row.hasPayment"><i class="pi pi-times" style="font-size: 1rem"></i></td>
+                    <td>{{ row.paymentMode }}</td>
+                    <td>{{ (!row.hasPayment?'-': row.paymentDate | date ) }}</td>
+                    <td>{{ row.manager }}</td>
+                    <td>{{ row.percentManager }}</td>
+                    <td>{{ row.commissionManager | currency: 'USD' }}</td>
+                    <td >
+                      <i class="pi pi-pencil" style="color: slateblue" (click)="editSalesGeneral(row)"  ></i>   
+                    </td>
+                    <td >
+                      <i class="pi pi-trash" style="color: slateblue" (click)="inactiveSalesGeneral(row)"  ></i>   
+                    </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+        </p-card>
+      </td>
+    </tr>
+  </table>
+  
+  
+</div>
+
+<p-dialog header="Add Sales Comission" [modal]="true" [(visible)]="openSalesCommission" class="poppipeline" >
+  
+  <div class="w100">
+    <table class="w100" >
+      <tr>
+        <td>
+          <label for="pipeline" class="font-semibold w-24">Value Commission</label><br/>
+        </td>
+      </tr>
+      <tr>
+        <input pInputText id="pipeline" class="flex-auto" autocomplete="off" [(ngModel)]="salesCommision.value" />
+        &nbsp;<p-button label="Clear" (onClick)="clearSalesCommision()" severity="success" *ngIf="salesCommision.id > 0" />
+        &nbsp;<p-button [label]="getNameButtonIncome()" (onClick)="addSalesmanCommision()" severity="success" />
+      </tr>
+    </table>
+    <br/>
+    <p-table [value]="salesIncomes" class="w100" >
+      <ng-template #header>
+          <tr>
+            <th>/</th>
+            <th>Order of Sale</th>
+            <th>Percent of Commision</th>
+            <th>Edit</th>
+            <th>/</th>
+          </tr>
+      </ng-template>
+      <ng-template #body let-item>
+          <tr>
+            <td><i class="pi pi-arrow-up pointer" style="color: slateblue" (click)="updateOrderIncome(item)" ></i>&nbsp;</td>
+            <td>{{item.order}}</td>
+            <td>{{item.value}}</td>
+            <td><i class="pi pi-pen-to-square pointer" (click)="editSalesIncome(item)" style="color: slateblue"></i></td>
+            <td><i class="pi pi-trash pointer" style="color: red" (click)="deleteSalesIncome(item)" ></i></td>
+          </tr>
+      </ng-template>
+  </p-table>
+    
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Add Sales Manager Comission" [modal]="true" [(visible)]="openSalesManagerCommission" class="poppipeline" >
+  
+  <div class="w100">
+    <table class="w100" >
+      <tr>
+        <td>
+          <label for="pipeline" class="font-semibold w-24">Value Commission-Manager</label><br/>
+        </td>
+      </tr>
+      <tr>
+        <input pInputText id="pipeline" class="flex-auto" autocomplete="off" [(ngModel)]="salesManagerCommision.value" />
+        &nbsp;<p-button label="Clear" (onClick)="clearSalesCommision()" severity="success" *ngIf="salesManagerCommision.id > 0" />
+        &nbsp;<p-button [label]="getNameManagerButtonIncome()" (onClick)="addManagerCommision()" severity="success" />
+      </tr>
+    </table>
+    <br/>
+    <p-table [value]="salesManagerIncomes" class="w100" >
+      <ng-template #header>
+          <tr>
+            <th>/</th>
+            <th>Order of Sale</th>
+            <th>Percent of Commision</th>
+            <th>Edit</th>
+            <th>/</th>
+          </tr>
+      </ng-template>
+      <ng-template #body let-item>
+          <tr>
+            <td><i class="pi pi-arrow-up pointer" style="color: slateblue" (click)="updateOrderManagerIncome(item)" ></i>&nbsp;</td>
+            <td>{{item.order}}</td>
+            <td>{{item.value}}</td>
+            <td><i class="pi pi-pen-to-square pointer" (click)="editSalesManagerIncome(item)" style="color: slateblue"></i></td>
+            <td><i class="pi pi-trash pointer" style="color: red" (click)="deleteSalesManagerIncome(item)" ></i></td>
+          </tr>
+      </ng-template>
+  </p-table>
+    
+  </div>
+  
+</p-dialog>

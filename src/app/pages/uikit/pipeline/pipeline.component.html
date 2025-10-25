@@ -1,0 +1,984 @@
+<p-tabs value="0">
+  <p-tablist>
+      <p-tab value="0">Opportunities</p-tab>
+      <p-tab value="1">Pipelines</p-tab>
+      <p-tab value="2">File Type</p-tab>
+  </p-tablist>
+  <p-tabpanels>
+      <p-tabpanel value="0">
+        <p-tabs value="0">
+          <p-tablist>
+            <p-tab value="0"><i class="pi pi-table" style="font-size: 2rem;" ></i></p-tab>
+            <p-tab value="1"><i class="pi pi-list" style="font-size: 2rem;" ></i></p-tab>
+          </p-tablist>
+          <p-tabpanels value="0">
+            <p-tabpanel value="0">
+              <div class="card-container">
+                <p-card class="w100" >
+                  <table class="w100" >
+                    <tr>
+                      <td class="wattendance" >
+                        <p-select [options]="statuses" placeholder="Select a Pipeline" 
+                                          optionLabel="name" class="w-full md:w-56" (onChange)="refreshCategory()" [(ngModel)]="selectedCategory" />
+                                          <label>&nbsp;{{opportunityCount}} Opportunities</label>
+                                          
+                      </td>
+                      <td class="left">
+                          <p-autocomplete placeholder="Select a Salesman/Customer"  [(ngModel)]="salesCustomFilter" [suggestions]="filteredSalesCustomerFilter" 
+                            optionLabel="name" (completeMethod)="filterSalesmanOrCustomer($event)" 
+                            class="flex-auto w100" (onSelect)="searchBySalesCustom($event)" (input)="onInput($event)" (keydown)="onKeyDownSearch($event)"  />&nbsp;
+                      </td>
+                      <td>
+                        <p-button label="+ Add Opportunity" class="right ml5" (onClick)="newOpportunity()" />
+                      </td>
+                    </tr>
+                  </table>
+                  
+
+                  
+                </p-card>
+                <div class="limit-pipelines" >
+                  <table>
+                    <tr>
+                      <td *ngFor="let pipeline of availablePipelines" class="atop" >
+                        <p-card styleClass="custom-card"  pDroppable (onDrop)="handleDrop($event,pipeline,false)"  >
+                          <ng-template pTemplate="header">
+                            <div class="title-supertab">
+                              <h6>&nbsp;&nbsp;{{pipeline.namePipeline}} - cards:&nbsp;{{getQtdeByPipeline(pipeline.idPipeline)}}</h6>
+                            </div>            
+                          </ng-template>
+                          <div class="product-description">
+                            <div class="p-2 border border-surface rounded-border w-60 h100 bgray supertab-body" style="width:100% !important;" >
+                              <div class="card-container " [attr.data-pipeline]="pipeline.namePipeline"  >
+                                <p-card *ngFor="let pipelineItem of pipeline.opportunityPipeline" class="subcard " pDraggable  
+                                (onDragStart)="dragStart(pipelineItem)" (onDragEnd)="dragEnd(pipeline, $event)"  [ngStyle]="{ 'border': '4px solid ' + pipelineItem.color, 'border-radius': '8px' }"  >
+                                  <div class="addcart"  >
+                                    <table class="w100" >
+                                      <tr (click)="editOpportunity(pipelineItem,pipeline,'0')" >
+                                        <td>
+                                          <h6>{{pipelineItem.nameCustomer}}</h6>
+                                          <hr class="line-criticity" [ngStyle]="{'border': '0','height': '4px','background-color': getDefaultColor(pipelineItem.color) }"/>
+                                          <!--(onChange)="updateCriticity(criticity,$event)"-->                              
+                                        </td>
+                                        <td>  
+                                          <p-avatar tooltipPosition="top" [pTooltip]="pipelineItem.owner" *ngIf="!hasProfileImage(pipelineItem)" label="{{getUserIcon(pipelineItem.owner)}}" styleClass="mr-2 right" size="normal" shape="circle" />
+                                          <p-avatar tooltipPosition="top" [pTooltip]="pipelineItem.owner" *ngIf="hasProfileImage(pipelineItem)" [image]="getImageProfile(pipelineItem)" styleClass="mr-2 right" size="normal" shape="circle" />
+                                        </td>
+                                      </tr>
+                                    </table>
+                                    <br/>
+                                    <table class="mtopr w100" >
+                                      <tr (click)="editOpportunity(pipelineItem,pipeline,'0')" >
+                                        <td colspan="2" >
+                                          <div>
+                                            <b>Opportunity Value:</b>&nbsp;{{pipelineItem.value | currency: 'USD' }}<br/>
+                                          </div>
+                                          <div class="mb-lines-card">
+                                            <b >Appointment:</b>&nbsp;{{pipelineItem.appointment != null? pipelineItem.appointment: "none"}}<br/>
+                                          </div>
+                                          <div class="mb-lines-card">
+                                            <div class="limit-address">
+                                              <b >Address:</b>&nbsp;{{limitAddress(pipelineItem.address)}}
+                                            </div>
+                                          </div>
+                                          
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td colspan="1">
+                                          <div class="mt5">
+                                            <i class="pi pi-phone pointer" style="color: slateblue" (onClick)="openChat()" ></i>
+                                            &nbsp;
+                                            <i class="pi pi-whatsapp pointer" style="color: slateblue"></i>
+                                            &nbsp;
+                                            <i class="pi pi-pen-to-square pointer" style="color: slateblue" (click)="editOpportunity(pipelineItem,pipeline,'1')" ></i>
+                                            &nbsp;
+                                            <i class="pi pi-file pointer" style="color: slateblue" (click)="editOpportunity(pipelineItem,pipeline,'2')" ></i>
+                                            &nbsp;
+                                            <i class="pi pi-calendar pointer" style="color: slateblue" (click)="redirectShedule()" ></i>
+                                            &nbsp;
+                                            <i *ngIf="isOwner" class="pi pi-wrench pointer" style="color: slateblue" (click)="openBluePrint(pipelineItem.id)" ></i>
+                                            &nbsp;
+                                            <i class="pi pi-wallet pointer" style="color: slateblue" (click)="openQuote(pipelineItem.id)" ></i>
+                                            &nbsp;
+                                            <i class="pi pi-dollar pointer" style="color: slateblue" (click)="openBluePrint(pipelineItem.id)" ></i>
+                                            &nbsp;
+                                            <i class="pi pi-money-bill pointer" style="color: slateblue" (click)="openBluePrint(pipelineItem.id)" ></i>
+                                          </div> 
+                                          <br/>
+                                        </td>
+                                        <td>
+                                          <i class="pi pi-trash right pointer trash-level" style="color: red" (click)="openOpportunityDelete(pipelineItem,$event)" ></i>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </div>
+                                </p-card>
+                              </div>
+                            </div>
+                          </div>
+                        </p-card>
+                      </td>
+                    </tr>
+                  </table>
+
+                  
+
+                </div>
+                
+              </div>
+            </p-tabpanel>
+            
+            <p-tabpanel  value="1">
+              <p-table [value]="oportunitiestable" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header>
+                    <tr>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Stage</th>
+                        <th>Value</th>
+                        <th>Status</th>
+                        <th>Owner</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-lead>
+                    <tr>
+                        <td>{{ lead.name }}</td>
+                        <td>{{ lead.phone }}</td>
+                        <td>{{ lead.stage }}</td>
+                        <td>{{ lead.value }}</td>
+                        <td>{{ lead.status }}</td>
+                        <td>{{ lead.owner }}</td>
+                        <td>{{ lead.created }}</td>
+                        <td>{{ lead.updated }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </p-tabpanel>
+            
+          </p-tabpanels>
+        </p-tabs>
+        
+      </p-tabpanel>
+      <p-tabpanel value="1">
+          <p class="m-0">
+            <p-card class="w100" >
+              <p-button label="+ Add Pipeline" severity="success" class="right ml5" (onClick)="addCategoryPop()" />
+            </p-card>
+            <p-table [value]="categories" [tableStyle]="{ 'min-width': '50rem' }" class="pointer">
+              <ng-template #header>
+                  <tr>
+                      <th>/</th>
+                      <th>Id</th>
+                      <th>Name</th>
+                  </tr>
+              </ng-template>
+              <ng-template #body let-lead >
+                  <tr (click)="editCategoryPop(lead)" >
+                      <td><i class="pi pi-trash" style="color: red" (click)="openWarnCategory(lead,$event)" ></i></td>
+                      <td>{{ lead.id }}</td>
+                      <td>{{ lead.name }}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </p>
+      </p-tabpanel>
+      <p-tabpanel value="2">
+          <p class="m-0">
+            <p-card class="w100" >
+              <p-button label="+ Add File Type" severity="success" class="right ml5" (onClick)="addFileTypePop()" />
+            </p-card>
+            <p-table [value]="fileTypes" [tableStyle]="{ 'min-width': '50rem' }" class="pointer">
+              <ng-template #header>
+                  <tr>
+                      <th>/</th>
+                      <th>Id</th>
+                      <th>Name</th>
+                  </tr>
+              </ng-template>
+              <ng-template #body let-fileType >
+                  <tr (click)="editFileTypePop(fileType)" >
+                      <td><i class="pi pi-trash" style="color: red" (click)="inactiveFileType(fileType,$event)" ></i></td>
+                      <td>{{ fileType.id }}</td>
+                      <td>{{ fileType.name }}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </p>
+      </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>
+<p-dialog header="Add/Edit Opportunities" [modal]="true" [(visible)]="openPipeline" class="poppipeline" >
+  <p-tabs [(value)]="index"   >
+    <p-tablist>
+      <p-tab value="0" id="tabop" data-defaulttab="opportunity" >Opportunity</p-tab>
+      <p-tab value="1" *ngIf="idOpportunity > 0" >Notes</p-tab>
+      <p-tab value="2" *ngIf="idOpportunity > 0" >Files</p-tab>
+      <p-tab value="3" *ngIf="idOpportunity > 0 && reviewForm.id > 0" >Review Form</p-tab>
+      <p-tab value="4" *ngIf="idOpportunity > 0 && gaveUpForm.id > 0" >Gave Up Form</p-tab>
+      <p-tab value="5" *ngIf="idOpportunity > 0" >Log Changes</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0" #tabop>
+        <span class="p-text-secondary block mb-8">Pipeline/Opportunity Information.</span>
+        <table class="w100 spaceform">
+          <tr>
+            <td  >
+              <div class="left" >
+                <label for="appointment" class="font-semibold w-24">Appointment</label><br/>
+                <p-datepicker id="appointment" class="flex-auto" [(ngModel)]="pAppointment" 
+                   [showTime]="true"
+                   [hourFormat]="'24'"
+                   />
+                &nbsp;
+              </div>
+              <div class="left" >
+                <label for="deadlineStand" class="font-semibold w-24">Deadline StandBy</label><br/>
+                <p-datepicker id="appointment" class="flex-auto" [(ngModel)]="deadlineStand" 
+                   [showTime]="false"
+                   />
+                &nbsp;
+              </div>
+            </td>
+            <td>
+              <label for="criticity" class="font-semibold w-24 ">Criticality</label><br/>
+                
+                <p-select [options]="criticities" [style.width.%]="100" placeholder="Select a Criticality" [(ngModel)]="criticityPop" optionLabel="name">
+                    <ng-template let-criticity pTemplate="item">
+                        <div class="flex items-center gap-2 w100p">             
+                            <div>{{ criticity.name }}-</div>
+                            <div class="mycolor" [ngStyle]="{'background-color': criticity.color }" ></div>
+                        </div>
+                    </ng-template>
+                </p-select>
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="">
+                <label for="customer" class="font-semibold w-24 left">Customer</label><br/>
+                <input pInputText id="customer" class="p-inputtext w100 mt-input" autocomplete="off" [(ngModel)]="customerName" />
+                
+                
+              </div>
+            </td>
+            <td>
+              <div >
+                <label for="salesman" class="font-semibold w-24 mb5">Salesman&nbsp;</label><br/>
+                        <p-autocomplete [(ngModel)]="salesman" [suggestions]="filteredSalesman" 
+                        optionLabel="name" (completeMethod)="filterSalesman($event)" class="flex-auto w100"  />&nbsp;
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div >
+       
+                <label for="product" class="font-semibold mb5 ">Product&nbsp;</label><br/>
+                <p-autocomplete [(ngModel)]="productItem" [suggestions]="filteredProductServices" 
+                optionLabel="name" (completeMethod)="filterProduct($event)" class="flex-auto w100"  />&nbsp;
+              </div>
+            </td>
+            <td>
+              <div  >
+                <label for="value" class="font-semibold w-24">Value</label><br/>
+                <input pInputText id="value" class="flex-auto w100" autocomplete="off" [(ngModel)]="value" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div >
+                <label for="statuses" class="font-semibold w-24 ">Pipeline</label><br/>
+                <p-select [options]="statuses" placeholder="Select a Pipeline" 
+                            optionLabel="name" class="w-full w100" (onChange)="getTabs(false)" [(ngModel)]="selectedCategoryPop" />
+              </div>
+            </td>
+            <td>
+              <div >
+                <label for="tab" class="font-semibold w-24">&nbsp;Tab</label><br/>
+                <p-select [options]="pipelinePop" placeholder="Select a Tab" 
+                          optionLabel="name" class="w-full w100" [(ngModel)]="selectedPipelinePop" />
+                <!--
+                <label>&nbsp;<b>Current Tab:</b>{{selectedPipelinePop!=null?selectedPipelinePop.name:""}}</label>
+                -->
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div  >
+                <label for="email" class="font-semibold w-24">Email</label><br/>
+                <input pInputText id="email" class="flex-auto w100" autocomplete="off" [(ngModel)]="email" />
+              </div>
+            </td>
+            <td>
+              <div >
+                <label for="phone" class="font-semibold w-24">&nbsp;Phone</label><br/>
+                <input pInputText id="phone" class="flex-auto w100" autocomplete="off" [(ngModel)]="phone" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div >
+                <label for="address" class="font-semibold w-24">Address</label><br/>
+                <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="address" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div >
+                <label for="setters" class="font-semibold w-24">Setters</label><br/>
+                <input pInputText id="setters" class="flex-auto w100" autocomplete="off" [(ngModel)]="setters" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div >
+                <label for="details" class="font-semibold w-24">Details</label><br/>
+                <input pInputText id="details" class="flex-auto w100" autocomplete="off" [(ngModel)]="details" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div class="flex justify-end gap-2 left w100p">
+                <p-button label="Cancel" severity="secondary" (click)="closeOpportunity()" />
+                <p-button label="Save" (click)="editOrSaveValidation()" />
+              </div>
+            </td>
+          </tr>
+        </table>
+              
+        <br/>
+        
+        
+        
+      </p-tabpanel>
+      <p-tabpanel value="1" class="wNotes" *ngIf="idOpportunity > 0"  >
+        <div class="flex items-center gap-2 mb-4 wNotes" >
+          <label for="notes" class="font-semibold w-24">Notes</label>
+          <input pInputText id="notes" class="flex-auto" autocomplete="off" [(ngModel)]="note" (keyup.enter)="AddNote($event)" />
+        </div>
+        <div class="listofnotes">
+          <div class="card-container">
+            <p-card class="wNotes" *ngFor="let note of notes"  >
+              {{note.createdDate}} 
+              &nbsp;
+              <i class="pi pi-pen-to-square pointer" style="color: slateblue" (click)="editNote(note)"  ></i>
+              &nbsp;
+              <i class="pi pi-trash right pointer" style="color: red" (click)="deleteNote(note)"  ></i>
+              - {{note.note}}
+            </p-card>
+          </div>
+        </div>
+      </p-tabpanel>
+      <p-tabpanel value="2" class="wNotes" *ngIf="idOpportunity > 0">
+
+        <div class="flex items-center gap-2 mb-4 mt20 left w100p" *ngIf="idOpportunity > 0" >
+          <table>
+            <tr>
+              <td>
+                <p-table [value]="editItem.fileTypesByOpportunity" [style]="{ 'max-width': '1000px', 'width': '100%' }" class="pointer">
+                              <ng-template #header >
+                                  <tr>
+                                      <th>Name</th>
+                                      <th *ngFor="let columns of getFileColumnCount(); let i = index" >File</th>
+                                  </tr>
+                              </ng-template>
+                              <ng-template #body let-fileType >
+                                  <tr>
+                                      <td>{{ fileType.name }}</td>
+                                      <td *ngFor="let fileItem of fileType.opportunityFilesS3; let i = index" >
+                                        <table>
+                                          <tr>
+                                          <td><p-button label="{{fileItem.path}}" (onClick)="previewFileS3(fileItem)" />&nbsp;</td>
+                                          <!--<td><p-button  (onClick)="previewFileS3(fileItem)" ><i class="pi pi-eye"></i> </p-button>&nbsp;</td>-->
+                                          <td><i class="pi pi-trash" style="color: slateblue" (click)="inactiveFile(fileItem.id)"  ></i></td>
+                                          </tr>
+                                        </table>
+                                        
+                                      </td>
+                                      <td *ngFor="let staticItem of getRemainingColumns(fileType.opportunityFiles); let i = index" >
+                                        <i class="pi pi-times" style="color: green"></i>
+                                      </td>
+                                  </tr>
+                              </ng-template>
+                          </p-table>
+              </td>
+            </tr>
+            <tr>
+              <td class="left" >
+                  <br/>
+                  <!--
+                  <p-fileupload #fu chooseLabel="Choose" mode="basic"
+                  chooseIcon="pi pi-upload" name="file" [url]="fileUrl" (onAlterUpload)="onUpload($event)"   
+                  [auto]="false" (onSelect)="onFileSelect($event)"
+                  />
+                  <p-button label="Upload" (onClick)="uploadFile()" severity="secondary" />
+                  -->
+                  <p-select [options]="fileTypes" placeholder="Select a File Type" 
+                  optionLabel="name" class="w-full md:w-56" (onChange)="getCategory()" [(ngModel)]="fileTypeForSave" />
+                  <br/>
+                  <p-toast />
+<p-fileupload #fileUpload class="file-width" name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true" (onUpload)="onTemplatedUpload($event)" (onSelect)="onSelectedFiles($event)">
+    <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
+        <div class="flex flex-wrap justify-between items-center flex-1 gap-4 w100p">
+            <div class="flex gap-2">
+                <p-button (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true" [outlined]="true" />
+                <p-button (onClick)="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" [rounded]="true" [outlined]="true" severity="success" [disabled]="!files || files.length === 0" />
+                <p-button (onClick)="clearCallback()" icon="pi pi-times" [rounded]="true" [outlined]="true" severity="danger" [disabled]="!files || files.length === 0" />
+            </div>
+            <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full" styleClass="md:w-20rem h-1 w-full md:ml-auto">
+                <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>
+            </p-progressbar>
+        </div>
+    </ng-template>
+    <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback">
+        <div class="flex flex-col gap-8 pt-4 w100p">
+            <div *ngIf="files?.length > 0">
+                <h5>Pending</h5>
+                <div class="flex flex-wrap gap-4">
+                    <div *ngFor="let file of files; let i = index" class="p-8 rounded-border flex flex-col border border-surface items-center gap-4">
+                        <div>
+                            <img role="presentation" [alt]="file.name" [src]="file.objectURL" width="100" height="50" />
+                        </div>
+                        <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">{{ file.name }}</span>
+                        <div>{{ formatSize(file.size) }}</div>
+                        <p-badge value="Pending" severity="warn" />
+                        <p-button icon="pi pi-times" (click)="onRemoveTemplatingFile($event, file, removeFileCallback, index)" [outlined]="true" [rounded]="true" severity="danger" />
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="uploadedFiles?.length > 0">
+                <h5>Completed</h5>
+                <div class="flex flex-wrap gap-4">
+                    <div *ngFor="let file of uploadedFiles; let i = index" class="card m-0 px-12 flex flex-col border border-surface items-center gap-4">
+                        <div>
+                            <img role="presentation" [alt]="file.name" [src]="file.objectURL" width="100" height="50" />
+                        </div>
+                        <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">{{ file.name }}</span>
+                        <div>{{ formatSize(file.size) }}</div>
+                        <p-badge value="Completed" class="mt-4" severity="success" />
+                        <p-button icon="pi pi-times" (onClick)="removeUploadedFileCallback(index)" [outlined]="true" [rounded]="true" severity="danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #file></ng-template>
+    <ng-template #empty>
+        <div class="flex items-center justify-center flex-col">
+            <i class="pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color"></i>
+            <p class="mt-6 mb-0">Drag and drop files to here to upload.</p>
+        </div>
+    </ng-template>
+</p-fileupload>    
+              </td>
+            </tr>
+          </table>
+          
+
+          
+          
+        </div>
+      </p-tabpanel>
+      <p-tabpanel value="3" class="wNotes" *ngIf="idOpportunity > 0 && reviewForm.id > 0">
+
+        <div class="flex items-center gap-2 mb-4 mt20 left w100p" *ngIf="idOpportunity > 0" >
+          <table class="w100">
+      <tr>
+        <td>
+          <label for="howOpen" class="font-semibold w-24"><b>How Open is the Customer?:</b>&nbsp;{{reviewForm.howOpen}}</label><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="additionalServices" class="font-semibold w-24 "><b>Additional Services?:</b>&nbsp;{{reviewForm.additionalServices}}</label><br/>
+        </td>
+      </tr>
+      <tr  >
+        <td>
+          <br/>
+          <label for="isAboutAcouple" class="font-semibold w-24 "><b>Would be sold for a couple?:</b>&nbsp;{{(reviewForm.isAboutAcouple?'Yes':'No')}}</label>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="theCoupleWerePresent" class="font-semibold w-24 "><b>Were the couple present (both of them at same time)?:</b>&nbsp;{{(reviewForm.theCoupleWerePresent?'Yes':'No')}}</label>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="budget" class="font-semibold w-24 "><b>What is the budget?:</b>&nbsp;{{reviewForm.budget | currency: 'USD'}}</label><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="mainProduct" class="font-semibold w-24 "><b>What is the requested model?:</b>&nbsp;{{reviewForm.mainProduct}}</label><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="closingDeadline" class="font-semibold w-24 "><b>Is there a deadline for the deal?:</b>&nbsp;{{reviewForm.closingDeadline | date: 'MM/dd/yyyy' }}</label><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="discountDescription" class="font-semibold w-24 "><b>Is There a special discount/deal offered?:</b>{{reviewForm.discountDescription}}</label><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="isNeededCrane" class="font-semibold w-24 "><b>Is needed Crane?:</b>&nbsp;{{(reviewForm.isNeededCrane?'Yes':'No')}}</label>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="isNeededFence" class="font-semibold w-24 "><b>Is needed Fence?:</b>&nbsp;{{(reviewForm.isNeededFence?'Yes':'No')}}</label>
+        </td>
+      </tr>
+    </table>
+          
+
+          
+          
+        </div>
+      </p-tabpanel>   
+      <p-tabpanel value="4" class="wNotes" *ngIf="idOpportunity > 0 && gaveUpForm.id > 0">
+
+        <div class="flex items-center gap-2 mb-4 mt20 left w100p" *ngIf="idOpportunity > 0" >
+          <table class="w100">
+          <tr>
+            <td>
+              <label for="WhyGaveUp" class="font-semibold w-24"><b>Why do you consider a Gave Up?:</b>&nbsp;{{gaveUpForm.whyGaveUp}}</label><br/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <br/>
+              <label for="ContactCount" class="font-semibold w-24 "><b>How many times do you contacted with customer?:</b>&nbsp;{{gaveUpForm.contactCount}}</label><br/>
+            </td>
+          </tr>
+          <tr  >
+            <td>
+              <br/>
+              <label for="ContactWays" class="font-semibold w-24 "><b>What are the different methods of communication used to reach and engage customers?:</b>&nbsp;{{gaveUpForm.contactWays}}</label>
+            </td>
+          </tr>
+          <tr >
+            <td>
+              <br/>
+              <label for="theCoupleWerePresent" class="font-semibold w-24 "><b>What kind of offers were made?:</b>&nbsp;{{gaveUpForm.kindOfOffer}}</label>
+            </td>
+          </tr>
+          <tr >
+            <td>
+              <br/>
+              <label for="budget" class="font-semibold w-24 "><b>Did you offer just the Shell?:</b>&nbsp;{{gaveUpForm.wasTriedShell}}</label><br/>
+            </td>
+          </tr>
+          <tr >
+            <td>
+              <br/>
+              <label for="mainProduct" class="font-semibold w-24 "><b>Do you believe if the discount range was increased the result would be different?:</b>&nbsp;{{gaveUpForm.discountHelp}}</label><br/>
+            </td>
+          </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="mainProduct" class="font-semibold w-24 "><b>It was happened some finantial issue?:</b>&nbsp;{{gaveUpForm.finantialProblems}}</label><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="mainProduct" class="font-semibold w-24 "><b>What do you believe that you could do better?:</b>&nbsp;{{gaveUpForm.whatWouldDoDiff}}</label><br/>
+        </td>
+      </tr>
+    </table>
+      
+        </div>
+      </p-tabpanel>
+      <p-tabpanel value="5" class="wNotes" *ngIf="idOpportunity > 0"  >
+        <div class="listofnotes">
+          <div class="card-container">
+            <p-table [value]="logChangeTabs" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header>
+                    <tr>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Pipeline</th>
+                        <th>Tab</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-log>
+                    <tr>
+                        <td>{{ log.createDate | date:'medium':'America/New_York' }}</td>
+                        <td>{{ log.nameUser }}</td>
+                        <td>{{ log.nameCategory }}</td>
+                        <td>{{ log.nameTab }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!--
+            <p-card class="wNotes" *ngFor="let log of logChangeTabs"  >
+              {{log.createDate}}-
+              &nbsp;Pipeline:{{log.nameCategory}}
+              &nbsp;Tab:{{log.nameTab}}
+            </p-card>
+          -->
+          </div>
+        </div>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+  
+</p-dialog>
+
+<p-dialog header="Add Pipeline" [modal]="true" [(visible)]="openPipelineDic" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4">
+    <label for="pipeline" class="font-semibold w-24">Pipeline</label>
+    <input pInputText id="pipeline" class="flex-auto" autocomplete="off" [(ngModel)]="pipelineEdit.name" />
+    <p-button label="Save" (onClick)="addPipeline()" severity="success" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Add File Type" [modal]="true" [(visible)]="openFileTypePop" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4">
+    <label for="fileTypeName" class="font-semibold w-24">Name</label>
+    <input pInputText id="fileTypeName" class="flex-auto" autocomplete="off" [(ngModel)]="fileType.name" />
+    <p-button label="Save" (onClick)="addFileType()" severity="success" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Delete Pipeline" [modal]="true" [(visible)]="warnDeletePipeline" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 wWarning">
+    <label for="pipeline" class="font-semibold w100p">Are you sure that you want delete the Pipeline?</label><br/>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+    <p-button label="No" (onClick)="warnDeletePipeline = false" severity="secondary" />
+    <p-button label="Yes" (onClick)="inactivePipeline()" severity="success" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Select The File Type" [modal]="true" [(visible)]="warnFileType" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 wWarning">
+    <label for="pipeline" class="font-semibold w100p">Before Upload File - Please select the File Type above!</label><br/>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+    <p-button label="Close" (onClick)="warnFileType = false" severity="success" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Add Pipeline/Tab" [modal]="true" [(visible)]="openCategoryDic" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="pipeline" class="font-semibold w-24">Pipeline</label><br/>
+          <input pInputText id="pipeline" class="flex-auto w100" autocomplete="off" [(ngModel)]="categoryEdit.name" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="customRole" class="font-semibold w-24 ">Custom Role</label><br/>
+                <p-select [options]="customRoles" placeholder="Select a Custom Role" 
+                            optionLabel="name" class="w-full w100" [(ngModel)]="customRole" />
+        </td>
+      </tr>
+      <tr *ngIf="customRole.id == 7" >
+        <td>
+          <br/>
+          <label for="customForm" class="font-semibold w-24 ">Custom Form</label><br/>
+                <p-select [options]="customForms" placeholder="Select a Custom Form" 
+                            optionLabel="name" class="w-full w100" [(ngModel)]="customForm" />
+        </td>
+      </tr>
+      <tr *ngIf="categoryEdit.id > 0" >
+        <td>
+          <br/>
+          <label for="tab" class="font-semibold w-24">Tab</label>       
+          <br/>
+          <input pInputText id="pipeline" class="flex-auto w100" autocomplete="off" [(ngModel)]="editedTab.name" (keydown.enter)="addTab()" />
+          <br/><br/>
+          <label>Conversion:</label>&nbsp;&nbsp;<div class="mt5"><p-toggleswitch [(ngModel)]="editedTab.conversion"  /></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <p-button label="Save" (onClick)="addCategory()" severity="success" class="right" />
+          <br/>
+        </td>
+      </tr>
+      <tr *ngFor="let tab of pipelineDictionary; let i = index"  >
+        <p-card class="w100 mb10"   
+          >
+          <i class="pi pi-arrow-up pointer" style="color: slateblue" (click)="updateOrder(tab)" ></i>&nbsp; {{tab.name}}
+          &nbsp;<i *ngIf="tab.conversion" class="pi pi-dollar pointer" style="color: slateblue"  ></i>
+          &nbsp;<i class="pi pi-pen-to-square pointer" style="color: slateblue" (click)="fillTab(tab)"  ></i>&nbsp;
+          <i class="pi pi-trash pointer" style="color: red" (click)="deletePipeline(tab)" ></i>
+        </p-card>
+        <br/>
+      </tr>
+    </table>
+    <!--
+    <br/>
+    <table class="w100">
+      <tr *ngFor="let tab of pipelineDictionary" >
+
+      </tr>
+    </table>
+    -->
+    
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Delete Category" [modal]="true" [(visible)]="warnDeleteCategory" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 wWarning">
+    <label for="pipeline" class="font-semibold w100p">Are you sure that you want delete the Category?</label><br/>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+    <p-button label="No" (onClick)="warnDeleteCategory = false" severity="secondary" />
+    <p-button label="Yes" (onClick)="inactiveCategory()" severity="success" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Delete Opportunity" [modal]="true" [(visible)]="warnDeleteOpportunity" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 wWarning">
+    <label for="pipeline" class="font-semibold w100p">Are you sure that you want delete the Opportunity?</label><br/>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+    <p-button label="No" (onClick)="warnDeleteOpportunity = false" severity="secondary" />
+    <p-button label="Yes" (onClick)="deleteOpportunity()" severity="success" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Preview Image" [modal]="true" [(visible)]="openPreviewImage" class="poppreview" [style]="{ width: '1000px' }" >
+  
+  <div class="flex items-center gap-2 mb-4 ">
+    <iframe [src]="previewImage" width="100%" height="600px"></iframe>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20 left w100p">
+    <p-button label="Close" (onClick)="openPreviewImage = false" severity="secondary" />
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="General Warning" [modal]="true" [(visible)]="generalWarnMessage" class="poppreview" [style]="{ width: '100% !important' }" >
+  
+  <div class="flex items-center gap-2 mb-4 ">
+    <span>{{generalMessage}}</span>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20  w100p">
+    <div class="right w100p">
+      <p-button label="Close" (onClick)="generalWarnMessage = false" severity="secondary" class="right" />
+    </div>   
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Review Form" [modal]="true" [(visible)]="openFormReview" class="poppreview" [style]="{ width: '600px' }" >
+  
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="howOpen" class="font-semibold w-24">How Open is the Customer?</label><br/>
+          <input pInputText id="howOpen" class="flex-auto w100" autocomplete="off" [(ngModel)]="reviewForm.howOpen" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="additionalServices" class="font-semibold w-24 ">Additional Services?</label><br/>
+          <input pInputText id="additionalServices" class="flex-auto w100" autocomplete="off" [(ngModel)]="reviewForm.additionalServices" /><br/>
+        </td>
+      </tr>
+      <tr  >
+        <td>
+          <br/>
+          <label for="isAboutAcouple" class="font-semibold w-24 ">Would be sold for a couple?</label>
+          &nbsp;<p-toggleswitch [(ngModel)]="reviewForm.isAboutAcouple"  />
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="theCoupleWerePresent" class="font-semibold w-24 ">Were the couple present (both of them at same time)?</label>
+          &nbsp;<p-toggleswitch [(ngModel)]="reviewForm.theCoupleWerePresent"  />
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="budget" class="font-semibold w-24 ">What is the budget?</label><br/>
+          <input pInputText id="budget" class="flex-auto w100" autocomplete="off" [(ngModel)]="reviewForm.budget" /><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="mainProduct" class="font-semibold w-24 ">What is the requested model?</label><br/>
+          <input pInputText id="mainProduct" class="flex-auto w100" autocomplete="off" [(ngModel)]="reviewForm.mainProduct" /><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="closingDeadline" class="font-semibold w-24 ">Is there a deadline for the deal?</label><br/>
+          <p-datepicker id="closingDeadline" class="flex-auto" [(ngModel)]="reviewForm.closingDeadline" 
+                   [showTime]="true"
+                   [hourFormat]="'24'"
+                   />
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="discountDescription" class="font-semibold w-24 ">Is There a special discount/deal offered?</label><br/>
+          <input pInputText id="discountDescription" class="flex-auto w100" autocomplete="off" [(ngModel)]="reviewForm.discountDescription" /><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="isNeededCrane" class="font-semibold w-24 ">Is needed Crane?</label>
+          &nbsp;<p-toggleswitch [(ngModel)]="reviewForm.isNeededCrane"  />
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="isNeededFence" class="font-semibold w-24 ">Is needed Fence?</label>
+          &nbsp;<p-toggleswitch [(ngModel)]="reviewForm.isNeededFence"  />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          &nbsp;<p-button label="Save" (onClick)="addReviewForm()" severity="success" class="right ml5px" />&nbsp;
+          <p-button label="Close" (onClick)="openFormReview = false" severity="secondary" class="right ml5px" />&nbsp;
+          <br/>
+        </td>
+      </tr>
+    </table>
+    
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Gave Up Form" [modal]="true" [(visible)]="openGaveUpForm" class="poppreview" [style]="{ width: '600px' }" >
+  
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="WhyGaveUp" class="font-semibold w-24">Why do you consider a Gave Up?</label><br/>
+          <input pInputText id="WhyGaveUp" class="flex-auto w100" autocomplete="off" [(ngModel)]="gaveUpForm.whyGaveUp" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="ContactCount" class="font-semibold w-24 ">How many times do you contacted with customer?</label><br/>
+          <input pInputText id="ContactCount" class="flex-auto w100" autocomplete="off" [(ngModel)]="gaveUpForm.contactCount" /><br/>
+        </td>
+      </tr>
+      <tr  >
+        <td>
+          <br/>
+          <label for="ContactWays" class="font-semibold w-24 ">What are the different methods of communication used to reach and engage customers ?</label>
+          <input pInputText id="ContactCount" class="flex-auto w100" autocomplete="off" [(ngModel)]="gaveUpForm.contactWays" /><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="theCoupleWerePresent" class="font-semibold w-24 ">What kind of offers were made?</label>
+          <input pInputText id="ContactCount" class="flex-auto w100" autocomplete="off" [(ngModel)]="gaveUpForm.kindOfOffer" /><br/>
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="budget" class="font-semibold w-24 ">Did you offer just the Shell?</label><br/>
+          &nbsp;<p-toggleswitch [(ngModel)]="gaveUpForm.wasTriedShell"  />
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="mainProduct" class="font-semibold w-24 ">Do you believe if the discount range was increased the result would be different?</label><br/>
+          &nbsp;<p-toggleswitch [(ngModel)]="gaveUpForm.discountHelp"  />
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="mainProduct" class="font-semibold w-24 ">It was happened some finantial issue?</label><br/>
+          &nbsp;<p-toggleswitch [(ngModel)]="gaveUpForm.finantialProblems"  />
+        </td>
+      </tr>
+      <tr >
+        <td>
+          <br/>
+          <label for="mainProduct" class="font-semibold w-24 ">What do you believe that you could do better?</label><br/>
+          <input pInputText id="mainProduct" class="flex-auto w100" autocomplete="off" [(ngModel)]="gaveUpForm.whatWouldDoDiff" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          &nbsp;<p-button label="Save" (onClick)="addGaveUpForm()" severity="success" class="right ml5px" />&nbsp;
+          <p-button label="Close" (onClick)="openGaveUpForm = false" severity="secondary" class="right ml5px" />&nbsp;
+          <br/>
+        </td>
+      </tr>
+    </table>
+    
+  </div>
+  
+</p-dialog>
+
+
+
+
+
+

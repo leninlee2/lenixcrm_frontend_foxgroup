@@ -1,0 +1,68 @@
+<div class="card-container mb10">
+    <p-card class="w100" *ngIf="step == 0 " >
+        <h3 style="text-align: center;" >&nbsp;Customer Name?
+        </h3>
+        <input pInputText id="customerName" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.nameCustomer" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Next" (onClick)="next()" severity="success"  />
+    </p-card>
+     <p-card class="w100" *ngIf="step == 1 " >
+        <h3 style="text-align: center;" >&nbsp;Phone Number?
+        </h3>
+        <input pInputText id="phoneNumber" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.phone" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Next" (onClick)="next()" severity="success"  />
+    </p-card>
+    <p-card class="w100" *ngIf="step == 2 " >
+        <h3 style="text-align: center;" >&nbsp;Address?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.address" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Next" (onClick)="next()" severity="success"  />
+    </p-card>
+    <p-card class="w100" *ngIf="step == 3 " >
+        <h3 style="text-align: center;" >&nbsp;Email?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.email" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Next" (onClick)="next()" severity="success"  />
+    </p-card>
+    <p-card class="w100" *ngIf="step == 4 " >
+        <h3 style="text-align: center;" >&nbsp;Setters?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.setters" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Next" (onClick)="next()" severity="success"  />
+    </p-card>
+    <p-card class="w100" *ngIf="step == 5 " >
+        <h3 style="text-align: center;" >&nbsp;Details?
+        </h3>
+        <input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.details" />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Next" (onClick)="next()" severity="success"  />
+    </p-card>
+    <p-card class="w100" *ngIf="step == 6 " >
+        <h3 style="text-align: center;" >&nbsp;Schedulle? (the opportunity is recorded as Appointment Schedule)
+        </h3>
+        <p-datepicker id="appointment" class="flex-auto" [(ngModel)]="opportunity.appointment" 
+                   [showTime]="true"
+                   [hourFormat]="'24'"
+                   />
+        <br/><br/>
+        <p-button styleClass="w-full" label="Save" (onClick)="saveOpportunity()" severity="success"  />
+    </p-card>
+</div>
+<p-dialog header="General Warning" [modal]="true" [(visible)]="generalWarnMessage" class="poppreview" [style]="{ width: '300px' }" >
+  
+  <div class="flex items-center gap-2 mb-4 ">
+    <span>{{generalMessage}}</span>
+   
+  </div>
+  <div class="flex items-center gap-2 mb-4 mt20  w100p">
+    <div class="right w100p">
+      <p-button label="Close" (onClick)="closeScreen()" severity="secondary" class="right" />
+    </div>   
+  </div>
+  
+</p-dialog>
+

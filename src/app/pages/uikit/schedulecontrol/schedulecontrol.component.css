@@ -1,0 +1,137 @@
+.mtm-deadline{
+    margin:0;
+}
+
+.poppipeline{
+    min-width: 500px !important;
+  }
+
+  .up-top{
+    margin-top: -20px;
+  }
+
+  .left{
+    float:left !important;
+  }
+
+  .w100{
+    width: 100% !important;
+  }
+
+  .right{
+    float: right !important;
+  }
+
+  .blockschedule{
+    border: 3px solid slateblue;
+  }
+
+   /*
+  .custom-card {
+    width: 200px !important; 
+    height: 80px !important;
+    margin: 10px;
+    float: left !important;
+    border: 2px solid blue;
+  }
+    */
+
+  ::ng-deep .p-card {
+    border: 2px solid slateblue;
+    border-radius: 8px;
+    width: 180px;        
+    height: 150px; 
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  /* Styles of treeview */
+
+  /* Reapply vertical line between nodes */
+  /*
+::ng-deep .p-tree-lines .p-treenode {
+  position: relative;
+  padding-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+::ng-deep .p-tree-lines .p-treenode::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0.5rem;
+  width: 1px;
+  background-color: #ccc;
+}
+
+::ng-deep .p-tree-lines .p-treenode-children {
+  margin-left: 1.5rem;
+  border-left: 1px solid #ccc;
+  padding-left: 0.5rem;
+}
+
+::ng-deep .custom-node-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 50px; 
+}
+
+::ng-deep .custom-node-content {
+  display: inline-block;
+  background: white;
+}
+*/
+/* Vertical line on the left of the tree */
+/* Container for the entire tree with padding */
+::ng-deep .p-tree .p-treenode-children .p-treenode {
+  border-left: 1px dashed black;
+}
+
+.tabledescription{
+  border-left: solid;
+  border-color: slateblue;
+}
+
+.fixedmonth{
+  width: 100px;
+  font-weight: bold;
+}
+
+.line-right-text {
+  position: relative;
+  text-align: right;         /* Align the word to the right */
+  color: #333;
+  font-weight: bold;
+  padding-right: 10px;       /* spacing from the right edge */
+}
+
+.line-right-text::before {
+  content: '';
+  position: absolute;
+  top: 50%;                  /* vertical center */
+  left: 0;                   /* start from left */
+  right: 100%;               /* end right before the text */
+  border-top: 1px solid #999; /* horizontal line */
+  transform: translateY(-50%);
+}
+
+.lineblue{
+  border: none;             /* Remove default border */
+  height: 2px;              /* Thickness of the line */
+  background-color: slateblue; /* Color of the line */
+  margin: 1rem 0;           /* Optional spacing */
+}
+
+.emptyschedule{
+  color:red;
+}
+
+::ng-deep p-autoComplete .p-inputtext {
+  width: 500px !important;
+}
+
+.mtop10{
+  margin-top: 10px;
+}

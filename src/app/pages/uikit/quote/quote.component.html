@@ -1,0 +1,101 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;Quote - Customer: {{quote.nameCustomer}}</h3>
+        <table class="w100">
+          <tr>
+            <td class="w50">
+              <label><b>Address:</b><br/><input pInputText id="address" class="flex-auto w100" autocomplete="off" [(ngModel)]="quote.address" />&nbsp;</label><br/>
+              <label><b>Phone:</b><br/><input pInputText id="phone" class="flex-auto w100" autocomplete="off" [(ngModel)]="quote.phone" />&nbsp;</label><br/>
+              <label><b>Email:</b><br/><input pInputText id="phone" class="flex-auto w100" autocomplete="off" [(ngModel)]="quote.email" />&nbsp;</label><br/>
+            </td>
+            <td class="w50 v-top">
+              <label><b>Name Of Quote:</b><br/><input pInputText id="name" class="flex-auto w100" autocomplete="off" [(ngModel)]="quote.name" />&nbsp;</label><br/>
+              <p-button label="Opportunities" severity="success" class="right ml5 mb5" (onClick)="redirectOpportunity()" />
+              <p-button label="Hearth" severity="success" class="right ml5 mb5" (onClick)="redirectOpportunity()" />
+              <p-button label="Preview" severity="success" class="right ml5 mb5" (onClick)="redirectOpportunity()" />
+              <p-button label="Send" severity="success" class="right ml5 mb5" (onClick)="redirectOpportunity()" />
+            </td>
+          </tr>
+        </table>
+        <br/>
+    </p-card>
+</div>
+
+<div class="card-container mb10">
+  <table class="w100">
+    <tr>
+      <td  style="width: 50% !important;" >
+        <p-card >
+          <label>(Registry each step of sale and send the quote)</label>
+          <br/>
+          <table class="w50" >
+              <tr>
+                <td  class="w100" colspan="2" >
+                  <label for="item" class="font-semibold w-24 mb5">Product&nbsp;</label><br/>
+                  <p-autocomplete [(ngModel)]="productItem" [suggestions]="filteredProductServices" 
+                        optionLabel="name" (completeMethod)="filterProduct($event)" class="flex-auto w100"  />&nbsp;
+                </td>          
+              </tr>
+              <tr>
+                <td class="w50" >
+                  <br/>
+                  <label for="unityPrice" class="font-semibold w-24 mb5">Unity Price&nbsp;</label><br/>
+                  <input pInputText id="unityPrice" #unityPrice class="flex-auto  w98" autocomplete="off" [(ngModel)]="productItem.unityPrice" />&nbsp;
+                </td>
+                <td  class="w50" >
+                  <br/>
+                  <label for="amount" class="font-semibold w-24 mb5">Amount&nbsp;</label><br/>
+                  <input pInputText id="amount" class="flex-auto  w98" autocomplete="off" [(ngModel)]="quoteItem.amount" />&nbsp;
+                </td>
+              </tr>
+              <tr>              
+                <td class="w100" colspan="2"  >
+                    <br/>
+                  <label for="comment" class="font-semibold w-24 mb5">Description&nbsp;</label><br/>
+                  <textarea rows="5" cols="30" class="w100" pTextarea [(ngModel)]="quoteItem.description"></textarea>&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" >
+                  &nbsp;<p-button *ngIf="quoteItem.id > 0" label="Reset" severity="success" class="right ml5 mb5" (onClick)="resetControl()" />&nbsp;
+                  <p-button [label]="getButtonLabel()" severity="success" class="right ml5 mb5" (onClick)="AddQuoteItem()" />
+                  <br/><br/>
+                </td>
+              </tr>          
+          </table>
+          <p-table [value]="quote.quoteItems" [style]="{ 'width': '50%' }" class="mb10" >
+            <ng-template #header>
+                <tr>
+                    <th>Product</th>
+                    <th>Unity Price</th>
+                    <th>Amount</th>
+                    <th>Total</th>
+                    <th>Description</th>
+                    <th>Edit</th>
+                    <th>-</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-row  >
+            <tr (click)="rowClick(row, $event)" >
+                    <td>{{ row.productName }}</td>
+                    <td>{{ row.unityPrice | currency: 'USD' }}</td>
+                    <td>{{ row.amount  }}</td>
+                    <td>{{ row.total | currency: 'USD' }}</td>
+                    <td>{{ row.description }}</td>
+                    <td >
+                      <i class="pi pi-pencil" style="color: slateblue"  ></i>   
+                    </td>
+                    <td >
+                      <i class="pi pi-trash" style="color: slateblue"  ></i>   
+                    </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+        </p-card>
+      </td>
+    </tr>
+  </table>
+  
+  
+</div>

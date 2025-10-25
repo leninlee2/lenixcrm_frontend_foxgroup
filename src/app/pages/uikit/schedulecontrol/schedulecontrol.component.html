@@ -1,0 +1,169 @@
+<div class="card">
+    <div class="font-semibold text-xl">Schedule Management - By Salesman</div>
+
+    <h3>&nbsp;Interval by Week</h3>
+    <table>
+      <tr>
+        <td>
+          <br/>
+           <h5>
+              <p-button label="<" (click)="moveWeek(-7)" />
+              Start:&nbsp;{{startFilter | date: 'MM/dd/yyyy' }}&nbsp; 
+              End:&nbsp; {{endFilter | date: 'MM/dd/yyyy'}}
+              <p-button label=">" (click)="moveWeek(7)" />
+           </h5>
+        </td>
+        
+      </tr>
+      <tr>
+        <td>
+            &nbsp;<label for="salesman" class="font-semibold w-24 mb5 mtm-sales">Salesman&nbsp;</label><br/>
+            &nbsp;<p-autocomplete [(ngModel)]="salesman" [suggestions]="filteredSalesman" 
+                  optionLabel="name" (completeMethod)="filterSalesman($event)" [ngClass]="'flex-auto w100'"   />&nbsp;
+        </td>
+      </tr>
+    </table>
+    <p-tree [value]="treeValue" class="p-tree-lines"  >
+        <ng-template let-node pTemplate="default">
+             <h5 *ngIf="node.firstLevel" >{{node.label}}</h5>
+             <div ngClass="tabledescription" *ngIf="!node.firstLevel" >
+                <table >
+                      <tr>
+                        <td>
+                          <div [ngClass]="'fixedmonth line-right-text'" >
+                              <hr ngClass="lineblue" />
+                              <span>{{node.label}}</span>
+                          </div>             
+                        </td>
+                        <td *ngFor="let customer of node.opportunityPipe; let i = index" >
+                          <p-card [ngClass]="'schedule-card'" >
+                            <b>{{customer.nameCustomer}}:</b><br/>
+                            <b>Schedule:</b>{{customer.appointment}}<br/>
+                            <b>Address:</b> {{customer.address}}
+                          </p-card>
+                          
+                        </td>
+
+                        <td *ngFor="let i of [].constructor(node.freeVisits); let idx = index"  >
+                          <p-card [ngClass]="'schedule-card emptyschedule'" (click)="openNewSchedule(node,i)"  >
+                            <b class="emptyschedule">Empty Schedule</b><br/><br/>
+                            <b>(Click to Schedule)</b>
+                          </p-card>
+                          
+                        </td>
+                        <td >
+                          <p-card [ngClass]="'schedule-card'" (click)="openArea(node.scheduleAreaDTO)" >
+                            <h5>Region:<br/>
+                             <span  >{{(node.scheduleAreaDTO.id==0?'Empty Area':node.scheduleAreaDTO.area)}}</span>
+                              <!--
+                              *ngIf="node.scheduleAreaDTO.id==0"
+                              <span *ngIf="node.scheduleAreaDTO.id!=0" >{{node.scheduleAreaDTO.area}}</span>
+                              -->
+                          </h5>
+
+                          </p-card>
+                        </td>
+
+                      </tr>
+             </table>
+             </div>
+             
+                    
+        </ng-template>
+    </p-tree>
+    
+</div>
+
+<p-dialog header="Add Schedule" [modal]="true" [(visible)]="openSchedule" class="poppipeline" >
+  <div class="poppipeline" >
+        <table class="w100">
+          <tr>
+            <td>
+              <h5>{{salesmanSelected.parentName}}</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div >
+                <label for="newAppointment" class="font-semibold w-24 ">Appointment</label>
+                <h5><p-datepicker id="newAppointment" class="flex-auto up-top left" 
+                  [(ngModel)]="newAppointment"  appendTo="body" [showTime]="true" /></h5>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <br/>
+                <label for="customer" class="font-semibold w-24">Customer</label><br/>
+                <input pInputText id="customer" class="flex-auto w100" autocomplete="off" [(ngModel)]="opportunity.nameCustomer" />
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+              <div class="flex justify-end gap-2 right w100p mtop10">
+                <br/><br/><br/><br/>
+                <p-button label="Cancel" severity="secondary" (click)="openSchedule = false;" />
+                <p-button label="Save" (click)="addSchedule()" />
+            </div>
+
+            </td>
+          </tr>
+        </table>      
+  </div>
+</p-dialog>
+
+<p-dialog header="Confirm Schedule" [modal]="true" [(visible)]="openDoubleCheck" class="poppipeline" >
+  <div class="poppipeline" >
+        <table class="w100">
+          <tr>
+            <td>
+                <br/>
+                <span>There is already an Opportunity Created to the Customer
+                  <br/> Do you want update the schedule and owner ?
+                </span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+              <div class="flex justify-end gap-2 right w100p mtop10">
+                <br/><br/><br/><br/>
+                <p-button label="No" severity="secondary" (click)="openDoubleCheck = false;" />
+                <p-button label="Yes" (click)="finalUpdateSchedule()" />
+            </div>
+
+            </td>
+          </tr>
+        </table>      
+  </div>
+</p-dialog>
+
+<p-dialog header="Add Schedule Area" [modal]="true" [(visible)]="openedArea" class="poppipeline" >
+  <div class="poppipeline" >
+        <table class="w100">
+          <tr>
+            <td>
+                <br/>
+                <label for="area" class="font-semibold w-24">Area</label><br/>
+                <input pInputText id="area" class="flex-auto w100" autocomplete="off" [(ngModel)]="areaDetail" />
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+              <div class="flex justify-end gap-2 right w100p mtop10">
+                <br/><br/><br/><br/>
+                <p-button label="Cancel" severity="secondary" (click)="openedArea = false;" />
+                <p-button label="Save" (click)="addArea()" />
+            </div>
+
+            </td>
+          </tr>
+        </table>      
+  </div>
+</p-dialog>
+
+<p-dialog header="" [(visible)]="loading" [modal]="true"  [closable]="false" [style]="{width: '100px', height:'100px', backgroundColor:'white' }" [contentStyle]="{'overflow':'visible'}" class="glass-dialog">
+  <img src="loading.gif" [ngStyle]="{ width: '100%', height: '100%', marginTop:'-10px' }" />
+</p-dialog>

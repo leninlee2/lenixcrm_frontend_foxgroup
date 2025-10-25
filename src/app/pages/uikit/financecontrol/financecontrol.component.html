@@ -1,0 +1,79 @@
+<div class="card-container mb10">
+    <p-card class="w100" >
+        <h3>&nbsp;Finance Control - Customer: {{opportunity.nameCustomer}}</h3><p-button label="Opportunities" severity="success" class="right ml5 mb5" (onClick)="redirectOpportunity()" /><br/>
+        <h5>Owner: {{opportunity.owner}} </h5>
+        <h5>Final Balance: {{finalValue | currency: 'USD'}} </h5>
+    </p-card>
+</div>
+
+<div class="card-container mb10">
+  <table class="w100">
+    <tr>
+      <td  style="width: 50% !important;" >
+        <p-card >
+          <h3>&nbsp;Overview Project</h3>
+          <table class="w100" >
+              <tr>
+                <td class="w50" >
+                  <label for="item" class="font-semibold w-24 mb5">Item&nbsp;</label><br/>
+                  <input pInputText id="item" class="flex-auto w98" autocomplete="off" [(ngModel)]="financialControl.name" />&nbsp;
+                </td>
+                <td  class="w50">
+                  <br/>
+                  <label for="comment" class="font-semibold w-24 mb5">Comment&nbsp;</label><br/>
+                  <input pInputText id="comment" class="flex-auto w100" autocomplete="off" [(ngModel)]="financialControl.comment" />&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td  class="w50">
+                  <label for="value" class="font-semibold w-24 mb5">{{(financialControl.recto?"Recto":"Payment")}}&nbsp;</label><br/>
+                  <input pInputText id="value" class="flex-auto  w98" autocomplete="off" [(ngModel)]="financialControl.value" />&nbsp;
+                </td>
+                <td  class="w49">
+                  <label for="recto" class="font-semibold w-24 mb5">Recto&nbsp;</label><br/>
+                  <p-toggleswitch [(ngModel)]="financialControl.recto" />&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" >
+                  &nbsp;<p-button *ngIf="financialControl.id > 0" label="Reset" severity="success" class="right ml5 mb5" (onClick)="resetControl()" />&nbsp;
+                  <p-button [label]="getButtonLabel()" severity="success" class="right ml5 mb5" (onClick)="AddFinancial()" /><br/><br/>
+                </td>
+              </tr>          
+          </table>
+          <p-table [value]="financialControls" [style]="{ 'width': '100%' }" class="mb10" >
+            <ng-template #header>
+                <tr>
+                    <th>Item</th>
+                    <th>Recto</th>
+                    <th>Payment</th>
+                    <th>Balance</th>
+                    <th>Comment</th>
+                    <th>Edit</th>
+                    <th>-</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-row  >
+            <tr (click)="rowClick(row, $event)" >
+                    <td>{{ row.name }}</td>
+                    <td>{{ (row.recto ? row.value : 0) | currency: 'USD' }}</td>
+                    <td>{{ (row.recto != true? row.value: 0) | currency: 'USD' }}</td>
+                    <td>{{ row.balance | currency: 'USD' }}</td>
+                    <td>{{ row.comment }}</td>
+                    <td >
+                      <i class="pi pi-pencil" style="color: slateblue"  ></i>   
+                    </td>
+                    <td >
+                      <i class="pi pi-trash" style="color: slateblue"  ></i>   
+                    </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+        </p-card>
+      </td>
+    </tr>
+  </table>
+  
+  
+</div>

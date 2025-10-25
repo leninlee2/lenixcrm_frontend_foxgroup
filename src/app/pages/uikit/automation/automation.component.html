@@ -1,0 +1,387 @@
+<p-tabs value="0">
+  <p-tablist>
+      <p-tab value="0">Criticality</p-tab>
+      <p-tab value="1">Automation Tables/Fields</p-tab>
+      <p-tab value="2">Workflow</p-tab>
+  </p-tablist>
+  <p-tabpanels>
+      <p-tabpanel value="0">
+          <p class="m-0">
+            <p-card class="w100" >
+              <p-button label="+ Add Criticity" severity="success" class="right ml5" (onClick)="addCriticityPop()" />
+            </p-card>
+            <p-table [value]="criticities" [tableStyle]="{ 'min-width': '50rem' }" class="pointer">
+              <ng-template #header>
+                  <tr>
+                      <th>/</th>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Color</th>
+                  </tr>
+              </ng-template>
+              <ng-template #body let-criticity >
+                  <tr (click)="editCriticityPop(criticity)" >
+                      <td><i class="pi pi-trash" style="color: red" (click)="deleteCriticity(criticity,$event)"  ></i></td>
+                      <td>{{ criticity.id }}</td>
+                      <td>{{ criticity.name }}</td>
+                      <td>
+                        <p-colorpicker [(ngModel)]="criticity.color" appendTo="body" (onChange)="updateCriticity(criticity,$event)" /><br/>
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </p>
+      </p-tabpanel>
+      <p-tabpanel value="1">
+          <p class="m-0">
+            <p-card class="w100" >
+              <p-button label="+ Add Automation Table" severity="success" class="right ml5" (onClick)="addWorkflowTablePop()" />
+            </p-card>
+            <p-table [value]="workflowTables" [tableStyle]="{ 'min-width': '50rem' }" class="pointer">
+              <ng-template pTemplate="caption">
+                <h5>Automation Tables</h5>
+              </ng-template>
+              <ng-template #header>
+                  <tr>
+                      <th>/</th>
+                      <th>Id</th>
+                      <th>Table</th>
+                      <th>Alias</th>
+                  </tr>
+              </ng-template>
+              <ng-template #body let-workflow >
+                  <tr (click)="editWorkflowTable(workflow)" >
+                      <td><i class="pi pi-trash" style="color: red" (click)="inactiveWorkflowTable(workflow,$event)" ></i></td>
+                      <td>{{ workflow.id }}</td>
+                      <td>{{ workflow.name }}</td>
+                      <td>{{ workflow.alias }}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </p>
+          <p class="m-0">
+            <p-card class="w100" >
+              <p-button label="+ Add Automation Field" severity="success" class="right ml5" (onClick)="addWorkflowFieldPop()" />
+            </p-card>
+            <p-table [value]="workflowFields" [tableStyle]="{ 'min-width': '50rem' }" class="pointer">
+              <ng-template pTemplate="caption">
+                <h5>Automation Fields</h5>
+              </ng-template>
+              <ng-template #header>
+                  <tr>
+                      <th>/</th>
+                      <th>Id</th>
+                      <th>Table Name</th>
+                      <th>Field</th>
+                      <th>Alias field</th>
+                      <th>Data Type</th>
+                  </tr>
+              </ng-template>
+              <ng-template #body let-workflow >
+                  <tr (click)="editWorkflowField(workflow)" >
+                      <td><i class="pi pi-trash" style="color: red" (click)="inactiveWorkflowField(workflow,$event)" ></i></td>
+                      <td>{{ workflow.id }}</td>
+                      <td>{{ workflow.tableName }}</td>
+                      <td>{{ workflow.realName }}</td>
+                      <td>{{ workflow.name }}</td>
+                      <td>{{ workflow.dataType }}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </p>
+      </p-tabpanel>
+      <p-tabpanel value="2">
+          <p class="m-0">
+            <p-card class="w100" >
+              <p-button label="+ Add Workflow" severity="success" class="right ml5" (onClick)="addWorkflowAutomationPop()" />
+            </p-card>
+            <p-table [value]="workflowAutomations" [tableStyle]="{ 'min-width': '50rem' }" class="pointer">
+              <ng-template pTemplate="caption">
+                <h5>Workflow Automations</h5>
+              </ng-template>
+              <ng-template #header>
+                  <tr>
+                      <th>/</th>
+                      <th>Id</th>
+                      <th>Name</th>
+                  </tr>
+              </ng-template>
+              <ng-template #body let-workflow >
+                  <tr (click)="editWorkflowAutomation(workflow)" >
+                      <td><i class="pi pi-trash" style="color: red" (click)="inactiveWorkflowAutomation(workflow,$event)" ></i></td>
+                      <td>{{ workflow.id }}</td>
+                      <td>{{ workflow.name }}</td>
+                  </tr>
+              </ng-template>
+          </p-table>
+          </p>
+      </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>
+
+<p-dialog header="Add Workflow Table" [modal]="true" [(visible)]="openWorkflowTablePop" class="poppipeline" >
+
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="fileTypeName" class="font-semibold w-24">Name</label><br/>
+              <p-select [options]="systables" placeholder="Select a System Table" 
+                    optionLabel="name" class="w-full md:w-56 w100"  [(ngModel)]="systable" appendTo="body" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="fileTypeName" class="font-semibold w-24">Alias</label><br/>
+            <input pInputText id="fileTypeName" class="flex-auto w100" autocomplete="off" [(ngModel)]="workflowTable.alias" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+            <br/>
+            <p-button label="Save" (onClick)="addWorkflowTable()" severity="success" class="right margin-cancel" />
+            <p-button label="Cancel" severity="secondary" (click)="openWorkflowTablePop = false" class="right " />
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+  
+</p-dialog>
+
+<p-dialog header="Add Workflow Field" [modal]="true" [(visible)]="openWorkflowFieldPop" class="poppipeline" >
+
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="tableName" class="font-semibold w-24">Table Name</label><br/>
+              <p-select [options]="workflowTables" placeholder="Select a Custom Table" 
+                    optionLabel="alias" class="w-full md:w-56 w100" (onChange)="getSysColumns($event,'')"  [(ngModel)]="workflowTable" appendTo="body" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="systemColumn" class="font-semibold w-24">System Column</label><br/>
+              <p-select [options]="sysColumns" placeholder="Select a System Column" 
+                    optionLabel="name" class="w-full md:w-56 w100"  [(ngModel)]="sysColumn" appendTo="body" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="fieldName" class="font-semibold w-24">Field Name</label><br/>
+            <input pInputText id="fieldName" class="flex-auto w100" autocomplete="off" [(ngModel)]="workflowField.name" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+            <br/>
+            <p-button label="Save" (onClick)="addWorkflowField()" severity="success" class="right margin-cancel" />
+            <p-button label="Cancel" severity="secondary" (click)="openWorkflowFieldPop = false" class="right " />
+            &nbsp;
+            
+            &nbsp;
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+  
+</p-dialog>
+
+<p-dialog header="Add Criticity" [modal]="true" [(visible)]="openCriticity" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="name" class="font-semibold w-24">Name</label><br/>
+          <input pInputText id="name" class="flex-auto w100" autocomplete="off" [(ngModel)]="criticity.name" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="color" class="font-semibold w-24">Color</label>&nbsp;
+          <p-colorpicker [(ngModel)]="criticity.color" appendTo="body" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <br/>
+        <div class="flex justify-end gap-2 right w100p">
+            <br/>
+            <p-button label="Cancel" severity="secondary" (click)="openCriticity = false" />
+            <p-button label="Save" (click)="addCriticity()" />
+        </div>
+        
+      </tr>
+    </table>
+    
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Add Workflow" [modal]="true" [(visible)]="openWorkflowAutomation" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="name" class="font-semibold w-24">Name</label><br/>
+          <input pInputText id="name" class="flex-auto w100" autocomplete="off" [(ngModel)]="workflowAutomation.name" /><br/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <br/>
+          <label for="action" class="font-semibold w-24">Action</label><br/>
+          <p-select [options]="workflowActions" placeholder="Select an Action" 
+                    optionLabel="name" class="w-full md:w-56 w100"  [(ngModel)]="action" appendTo="body" />
+        </td>
+      </tr>
+      <tr *ngIf="action.name == 'Change Criticality'" >
+        <td>
+          <br/>
+          <label for="criticality" class="font-semibold w-24">Criticality</label><br/>
+          <p-select [options]="criticities" [style.width.%]="100" placeholder="Select a Criticality" [(ngModel)]="criticityPop" optionLabel="name">
+                    <ng-template let-criticity pTemplate="item">
+                        <div class="flex items-center gap-2 w100p">             
+                            <div>{{ criticity.name }}-</div>
+                            <div class="mycolor" [ngStyle]="{'background-color': criticity.color }" ></div>
+                        </div>
+                    </ng-template>
+          </p-select>
+        </td>
+      </tr>
+      <tr *ngIf="action.id == 2 || action.id == 3" >
+        <td>
+          <br/>
+          <label for="shortMessage" class="font-semibold w-24">Short message</label><br/>
+          <input pInputText id="shortMessage" class="flex-auto w100" autocomplete="off" [(ngModel)]="workflowAutomation.message" /><br/>
+        </td>
+      </tr>
+      <tr *ngIf="action.id == 4 || action.id == 5" >
+        <td>
+          <br/>
+          <label for="shortMessage" class="font-semibold w-24">Template</label><br/>
+          <p-select [options]="templates" placeholder="Select a Template" 
+                    optionLabel="name" class="w-full md:w-56 w100"  [(ngModel)]="template" appendTo="body" />
+        </td>
+      </tr>
+      <tr *ngIf="action.id == 6" >
+        <td>
+          <br/>
+          <label for="shortMessage" class="font-semibold w-24">Final Tab->Pipeline</label><br/>
+          <p-select [options]="tabs" placeholder="Select a Tab" 
+                    optionLabel="name" class="w-full md:w-56 w100"  [(ngModel)]="finalTab" appendTo="body" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p-tree [value]="workflowGroups" >
+            <ng-template let-node pTemplate="default">
+              <div >
+                  &nbsp;<span>{{node.label}}</span>
+                  &nbsp;&nbsp;<i class="pi pi-trash" style="color: slateblue" (click)="inactiveRole(node)" ></i>
+                  &nbsp;&nbsp;&nbsp;<i *ngIf="node.firstLevel" class="pi pi-plus" style="color: slateblue" (click)="openRolePopUp(node)" ></i>
+              </div>
+              
+            </ng-template>
+          </p-tree>
+        </td>
+      </tr>
+      <tr>
+        <br/>
+        <div class="flex justify-end gap-2 right w100p">
+            <br/>
+            <p-button label="Cancel" severity="secondary" (click)="openWorkflowAutomation = false" />
+            <p-button label="Save" (click)="addWorkflowAutomation()" />
+        </div>
+        
+      </tr>
+    </table>
+    
+  </div>
+  
+</p-dialog>
+
+<p-dialog header="Add Role" [modal]="true" [(visible)]="openRole" class="poppipeline" >
+  
+  <div class="flex items-center gap-2 mb-4 w500">
+    <table class="w100">
+      <tr>
+        <td>
+          <label for="tableName" class="font-semibold w-24">Table</label><br/>
+          <p-select [options]="workflowTables" placeholder="Select a Custom Table" 
+            optionLabel="alias" class="w-full md:w-56 w100" (onChange)="getFilteredFields($event)"  
+            [(ngModel)]="workflowTable" appendTo="body" />
+        </td>
+        <td>
+          <!--(onChange)="getSysColumns($event,'')"-->
+          <label for="customField" class="font-semibold w-24">Field</label><br/>
+          <p-select [options]="filterWorkflowFields" placeholder="Select a Custom Fields" 
+            optionLabel="name" class="w-full md:w-56 w100"   
+            [(ngModel)]="fieldForAutomation" appendTo="body" (onChange)="checkOperator($event)" />
+        </td>
+        <td>
+          <!-- (onChange)="getSysColumns($event,'')"  -->
+          <label for="operator" class="font-semibold w-24">Operator</label><br/>
+          <p-select [options]="operators" placeholder="Select an Operator" 
+            optionLabel="name" class="w-full md:w-56 w100"  
+            [(ngModel)]="operator" appendTo="body" [disabled]="disableOperator" />
+        </td>
+        <td *ngIf="fieldForAutomation.name != 'Tab'" >
+          <label for="name" class="font-semibold w-24">Start Value</label><br/>
+          <input pInputText id="name" class="flex-auto w100" autocomplete="off" [(ngModel)]="role.startValue" /><br/>
+        </td>
+        <td *ngIf="fieldForAutomation.name == 'Tab'">
+          <label for="name" class="font-semibold w-24">Tab</label><br/>
+          <p-select [options]="tabs" placeholder="Select a Tab" 
+            optionLabel="name" class="w-full md:w-56 w100"  
+            [(ngModel)]="tab" appendTo="body" />
+        </td>
+        <td *ngIf="operator.name == 'BETWEEN'">
+          <br/>
+          <span>AND</span>
+        </td>
+        <td *ngIf="operator.name == 'BETWEEN'" >
+          <label for="name" class="font-semibold w-24">End Value</label><br/>
+          <input pInputText id="name" class="flex-auto w100" autocomplete="off" [(ngModel)]="role.endValue" /><br/>
+        </td>
+        <td *ngIf="fieldForAutomation.name != 'Tab'" >
+          <label for="unity" class="font-semibold w-24">Unity</label><br/>
+          <p-select [options]="unities" placeholder="Select an Unity" 
+              optionLabel="name" class="w-full md:w-56 w100"  
+                  [(ngModel)]="unity" appendTo="body" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="7" *ngIf="operator.name == 'BETWEEN'" >
+            <br/>
+            <div class="flex justify-end gap-2 right w100p">
+                <br/>
+                <p-button label="Cancel" severity="secondary" (click)="openRole = false" />
+                <p-button label="Save" (click)="addRole()" />
+            </div>
+        </td>
+        <td colspan="5" *ngIf="operator.name != 'BETWEEN'" >
+            <br/>
+            <div class="flex justify-end gap-2 right w100p">
+                <br/>
+                <p-button label="Cancel" severity="secondary" (click)="openRole = false" />
+                <p-button label="Save" (click)="addRole()" />
+            </div>
+        </td>
+      </tr>
+    </table>
+    
+  </div>
+  
+</p-dialog>
+
+
+
+

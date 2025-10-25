@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@use './tailwind.css';
+@use './assets/layout/layout.scss';
+@use 'primeicons/primeicons.css';
+@use './assets/demo/demo.scss';
+
+.dash-pipeline{
+    width: 38% !important;
+}
+
+.dash-opportunity{
+    width: 200px !important;
+    margin-left: -270px !important;
+}
+
+.table-data-dash {
+  border-collapse: separate; /* important to enable border-spacing */
+  border-spacing: 10px 0;    /* 10px horizontal (between columns), 0 vertical */
+}

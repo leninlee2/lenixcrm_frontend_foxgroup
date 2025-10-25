@@ -1,0 +1,23 @@
+.mtm-deadline{
+    margin:0;
+}
+
+.poppipeline{
+    min-width: 500px !important;
+  }
+
+  .up-top{
+    margin-top: -20px;
+  }
+
+  .left{
+    float:left !important;
+  }
+
+  .w100{
+    width: 100% !important;
+  }
+
+  .right{
+    float: right !important;
+  }

@@ -1,0 +1,169 @@
+.w100{
+    width: 100% !important;
+  }
+
+.mb10{
+    margin-bottom: 10px !important;
+}
+
+.poppipeline{
+  min-width: 500px !important;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+:host ::ng-deep .fc-event {
+  cursor: pointer;
+}
+
+.container {
+  margin: 50px;
+  font-family: Arial, sans-serif;
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+
+p-listbox {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.w100px{
+  width: 100px !important;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Add some space between the cards */
+  justify-content: left; /* Distribute the cards evenly */
+}
+
+.custom-card {
+  width: 400px !important; /* Set a specific width for each card */
+  margin: 10px; /* Add some space around each card */
+  float: left !important;
+}
+
+.product-description{
+  width: 400px !important;
+}
+
+.subcard{
+  margin-bottom: -7px !important;
+  min-width: 100% !important;
+}
+
+.h100{
+  min-height: 400px !important;
+}
+
+.w100{
+  width: 100% !important;
+}
+
+.right{
+  float: right !important;
+}
+
+.ml5{
+  margin-left: 5px;
+}
+
+.bsolid{
+  border-style: solid;
+  border-color: black;
+}
+
+.w50p{
+  width: 50% !important;
+}
+
+.w30p{
+  width: 30% !important;
+}
+
+.w100p{
+  width: 100% !important;
+}
+
+.left{
+  float: left !important;
+}
+
+.mt20{
+  margin-top: 20px !important;
+}
+
+.poppipeline{
+  height: 200px !important;
+  width: 50rem;
+  overflow: scroll;
+}
+
+.right{
+  float:right !important;
+}
+
+.mt5{
+  margin-top: 5px !important;
+}
+
+.wNotes{
+  width: 1000px !important;
+}
+
+.listofnotes{
+  width: 1000px;
+  height: 200px;
+  overflow: scroll !important;
+}
+
+.limit-pipelines{
+  min-width: 100% !important;
+  height: 550px !important;
+  overflow: scroll;
+}
+
+.p-card {
+  float: left;
+  margin-right: 20px; /* Optional, to create space between cards */
+}
+
+.atop{
+  vertical-align: top; /* Ensures the card stays aligned with the top of the cell */
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.wWarning{
+  width: 500px !important;
+}
+
+.bgray{
+  background-color: lightgreen !important;
+}
+
+.addcart{
+  height: 76px !important;
+  margin-top:-10px !important;
+}
+
+.mtopr{
+  margin-top: -25px !important;
+}
+
+.w500{
+  min-width: 500px;
+}
+
+.mb10{
+  margin-bottom: 10px !important;
+}

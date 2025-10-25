@@ -1,0 +1,71 @@
+<div class="card">
+    <div class="font-semibold text-xl">General Tasks</div>
+
+    <h3>&nbsp;Montly Tasks</h3>
+    <table>
+      <tr>
+        <td>
+          <br/>
+          <h5><p-datepicker id="dateFilter" class="flex-auto" 
+            [(ngModel)]="dateFilter" view="month" dateFormat="mm/yy" (onSelect)="getAllTasks()" /></h5>
+            <!---->
+        </td>
+        <td>
+            &nbsp;<label for="salesman" class="font-semibold w-24 mb5 mtm-sales">Salesman&nbsp;</label><br/>
+            &nbsp;<p-autocomplete [(ngModel)]="salesman" [suggestions]="filteredSalesman" 
+                  optionLabel="name" (completeMethod)="filterSalesman($event)" class="flex-auto w100" (onSelect)="addGeneralTask()"  />&nbsp;
+        </td>
+      </tr>
+    </table>
+          
+
+    
+    <!--
+    <p-tree [value]="treeValue" selectionMode="checkbox" [(selection)]="selectedTreeValue"></p-tree>
+    -->
+    <p-tree [value]="treeValue">
+        <ng-template let-node pTemplate="default">
+          <p-checkbox [(ngModel)]="node.done" [binary]="true" (onChange)="updateDone($event,node)" />
+          &nbsp;<span>{{node.label}}- Deadline:&nbsp;{{node.deadline | date}}</span>
+          &nbsp;&nbsp;<i class="pi pi-trash" style="color: slateblue" (click)="inactiveTaskItem(node)" ></i>
+          &nbsp;&nbsp;&nbsp;<i class="pi pi-plus" style="color: slateblue" (click)="openTaskItemNew(node)" ></i>
+        </ng-template>
+    </p-tree>
+</div>
+
+<p-dialog header="Add Task" [modal]="true" [(visible)]="openedTask" class="poppipeline" >
+  <div class="poppipeline" >
+        <table class="w100">
+          <tr>
+            <td>
+              <div >
+                <label for="deadline" class="font-semibold w-24 ">Deadline</label>
+                <h5><p-datepicker id="deadline" class="flex-auto up-top left" 
+                  [(ngModel)]="generalItemTask.deadline"  appendTo="body" /></h5>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <br/>
+                <label for="description" class="font-semibold w-24">Description</label><br/>
+                <input pInputText id="description" class="flex-auto w100" autocomplete="off" [(ngModel)]="generalItemTask.description" />
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+              <div class="flex justify-end gap-2 right w100p">
+                <br/><br/>
+                <p-button label="Cancel" severity="secondary" (click)="openedTask = false;" />
+                <p-button label="Save" (click)="addTask()" />
+            </div>
+
+            </td>
+          </tr>
+        </table>
+        
+        
+        
+      </div>
+</p-dialog>
